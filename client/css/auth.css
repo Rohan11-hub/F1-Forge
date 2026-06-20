@@ -1,0 +1,142 @@
+/* ============================================================
+   F1 FORGE — auth.css
+   Login & Signup pages
+   ============================================================ */
+
+#auth {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  padding: 4rem 0;
+}
+
+#auth .centered {
+  width: 100%;
+}
+
+#auth .sec-num {
+  margin-bottom: 0.5rem;
+}
+
+#auth h2 {
+  margin-bottom: 0.5rem;
+}
+
+.auth-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-bottom: 2.5rem;
+}
+
+/* --- FORM --- */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  max-width: 420px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.input {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color var(--transition);
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--muted);
+  opacity: 0.5;
+}
+
+.input:focus {
+  border-color: var(--primary);
+}
+
+.input.error {
+  border-color: var(--error);
+}
+
+.input.success {
+  border-color: var(--success);
+}
+
+/* --- MESSAGES --- */
+.form-message {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  min-height: 14px;
+}
+
+.form-message.error   { color: var(--error); }
+.form-message.success { color: var(--success); }
+
+/* --- SUBMIT BUTTON --- */
+.auth-btn {
+  display: inline-block;
+  margin-top: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+  border: 0.5px solid var(--primary);
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  transition: background var(--transition), color var(--transition);
+  align-self: flex-start;
+}
+
+.auth-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.auth-btn:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+/* --- SWITCH LINK --- */
+.auth-switch {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.auth-switch a {
+  color: var(--primary);
+  transition: letter-spacing var(--transition);
+}
+
+.auth-switch a:hover {
+  letter-spacing: 0.12em;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 480px) {
+  .auth-form {
+    max-width: 100%;
+  }
+}
