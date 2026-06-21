@@ -2,14 +2,105 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1-Forge</title>
-    <link rel="stylesheet" href="css/global.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Builder — F1 Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/teambuilder.css">
 </head>
 
 <body>
-    <h1>Team Builder - F1-Forge</h1>
-</body>
 
+  <!-- CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">F1 FORGE</a>
+    <div class="nav-links">
+      <a href="teambuilder.html" class="active">Team Builder</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="settings.html">Settings</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle">DARK</button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div id="tb-header">
+    <div class="centered">
+      <span class="sec-num">BUILD YOUR TEAM</span>
+      <h2>TEAM BUILDER</h2>
+      <p class="tb-sub">Pick 5 drivers, 2 constructors and 1 turbo driver. Stay under 150M.</p>
+    </div>
+  </div>
+
+  <!-- BUDGET BAR -->
+  <div id="budget-bar">
+    <div class="centered budget-inner">
+      <div class="budget-info">
+        <span class="budget-label">BUDGET REMAINING</span>
+        <span class="budget-amount" id="budgetRemaining">150.0M</span>
+      </div>
+      <div class="budget-info">
+        <span class="budget-label">DRIVERS SELECTED</span>
+        <span class="budget-amount" id="driversCount">0 / 5</span>
+      </div>
+      <div class="budget-info">
+        <span class="budget-label">CONSTRUCTORS SELECTED</span>
+        <span class="budget-amount" id="constructorsCount">0 / 2</span>
+      </div>
+      <button class="save-btn" id="saveTeamBtn" disabled>SAVE TEAM →</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <main>
+    <div class="centered">
+
+      <!-- DRIVERS -->
+      <section class="tb-section">
+        <span class="sec-num">01 — DRIVERS</span>
+        <h2>SELECT 5 DRIVERS</h2>
+        <div class="driver-grid" id="driverGrid"></div>
+      </section>
+
+      <!-- CONSTRUCTORS -->
+      <section class="tb-section">
+        <span class="sec-num">02 — CONSTRUCTORS</span>
+        <h2>SELECT 2 CONSTRUCTORS</h2>
+        <div class="constructor-grid" id="constructorGrid"></div>
+      </section>
+
+      <!-- TURBO DRIVER -->
+      <section class="tb-section" id="turboSection">
+        <span class="sec-num">03 — TURBO DRIVER</span>
+        <h2>SELECT TURBO DRIVER</h2>
+        <p class="tb-sub">Choose 1 driver from your selected team. Their points are doubled.</p>
+        <div class="turbo-grid" id="turboGrid">
+          <p class="turbo-placeholder">Select your 5 drivers first.</p>
+        </div>
+      </section>
+
+      <!-- TEAM SUMMARY -->
+      <section class="tb-section" id="summarySection">
+        <span class="sec-num">04 — YOUR TEAM</span>
+        <h2>TEAM SUMMARY</h2>
+        <div class="summary-grid" id="summaryGrid">
+          <p class="turbo-placeholder">Your team will appear here.</p>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/teambuilder.js"></script>
+
+</body>
 </html>

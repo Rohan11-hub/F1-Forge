@@ -2,50 +2,63 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1-Forge</title>
-    <link rel="stylesheet" href="css/global.css">
-    <link rel="stylesheet" href="css/auth.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — F1 Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/auth.css">
 </head>
 
 <body>
-    <div class="cursor-dot"></div>
-    <div class="cursor-ring"></div>
-    <h1>Login - F1-Forge</h1>
-    <nav>
-        <div class="nav-right">
-        <button class="theme-toggle" id="themeToggle">DARK</button>
+
+  <!-- CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">F1 FORGE</a>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle">DARK</button>
+    </div>
+  </nav>
+
+  <!-- LOGIN -->
+  <section id="auth">
+    <div class="centered">
+      <span class="sec-num">WELCOME BACK</span>
+      <h2>LOGIN</h2>
+      <p class="auth-sub">Sign in to manage your team and check your score.</p>
+
+      <form class="auth-form" id="loginForm">
+
+        <div class="form-group">
+          <label class="form-label">EMAIL</label>
+          <input type="email" id="loginEmail" class="input" placeholder="your@email.com" autocomplete="email">
+          <span class="form-message" id="emailMsg"></span>
         </div>
-    </nav>
-    <section id="login">
-  <div class="centered">
-    <span class="sec-num">LOGIN</span>
-    <h2>WELCOME BACK</h2>
-    
-    <form class="auth-form" id="loginForm">
-      <div class="form-group">
-        <label>EMAIL</label>
-        <input type="email" id="loginEmail" class="input" placeholder="your@email.com">
-        <span class="form-message" id="emailError"></span>
-      </div>
-      
-      <div class="form-group">
-        <label>PASSWORD</label>
-        <input type="password" id="loginPassword" class="input" placeholder="••••••••">
-        <span class="form-message" id="passwordError"></span>
-      </div>
 
-      <button type="submit" class="auth-btn">LOGIN →</button>
+        <div class="form-group">
+          <label class="form-label">PASSWORD</label>
+          <input type="password" id="loginPassword" class="input" placeholder="••••••••" autocomplete="current-password">
+          <span class="form-message" id="passwordMsg"></span>
+        </div>
 
-      <span class="auth-switch">
-        No account? <a href="signup.html">Sign Up</a>
-      </span>
-    </form>
-  </div>
-</section>
-<script src="js/nav.js"></script>
-<script src="js/auth.js"></script>
+        <button type="submit" class="auth-btn" id="loginBtn">LOGIN →</button>
+
+        <span class="auth-switch">
+          No account? <a href="signup.html">Sign Up</a>
+        </span>
+
+      </form>
+    </div>
+  </section>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/auth.js"></script>
+
 </body>
-
 </html>

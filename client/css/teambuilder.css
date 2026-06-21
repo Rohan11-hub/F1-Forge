@@ -1,0 +1,334 @@
+/* ============================================================
+   F1 FORGE — teambuilder.css
+   ============================================================ */
+
+/* --- HEADER --- */
+#tb-header {
+  padding: 3rem 0 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.tb-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* --- BUDGET BAR --- */
+#budget-bar {
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0.75rem 0;
+}
+
+.budget-inner {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.budget-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.budget-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.budget-amount {
+  font-family: var(--font-display);
+  font-size: 22px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.budget-amount.over { color: var(--error); }
+.budget-amount.low  { color: var(--primary); }
+
+.save-btn {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+  border: 0.5px solid var(--primary);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  transition: background var(--transition), color var(--transition);
+}
+
+.save-btn:hover:not(:disabled) {
+  background: var(--primary);
+  color: #fff;
+}
+
+.save-btn:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+/* --- SECTIONS --- */
+.tb-section {
+  padding: 3rem 0;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.tb-section:last-child { border-bottom: none; }
+.tb-section h2 { margin-bottom: 1.5rem; }
+
+/* --- DRIVER GRID --- */
+.driver-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+/* --- DRIVER CARD --- */
+.driver-card {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform var(--transition), border-color var(--transition);
+  position: relative;
+}
+
+.driver-card:hover {
+  transform: translateY(-2px);
+  border-left-color: var(--primary);
+}
+
+.driver-card.selected {
+  border-left-color: var(--primary);
+  background: rgba(232, 0, 45, 0.06);
+}
+
+.driver-card.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.driver-card.turbo-active {
+  border-left-color: var(--secondary);
+  background: rgba(65, 105, 225, 0.06);
+}
+
+.driver-pos {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.driver-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.driver-team {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.driver-price {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-top: 6px;
+}
+
+.selected-tag {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--primary);
+  border: 0.5px solid var(--primary);
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+/* --- CONSTRUCTOR GRID --- */
+.constructor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.constructor-card {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.constructor-card:hover {
+  transform: translateY(-2px);
+  border-left-color: var(--secondary);
+}
+
+.constructor-card.selected {
+  border-left-color: var(--secondary);
+  background: rgba(65, 105, 225, 0.06);
+}
+
+.constructor-card.disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.constructor-pos {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.constructor-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.constructor-price {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--secondary);
+  margin-top: 6px;
+}
+
+/* --- TURBO SECTION --- */
+.turbo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.turbo-placeholder {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.turbo-card {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--secondary);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform var(--transition), border-color var(--transition);
+}
+
+.turbo-card:hover {
+  transform: translateY(-2px);
+  border-left-color: var(--primary);
+}
+
+.turbo-card.selected {
+  border-left-color: var(--primary);
+  background: rgba(232, 0, 45, 0.06);
+}
+
+.turbo-tag {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--secondary);
+}
+
+.turbo-tag.active { color: var(--primary); }
+
+/* --- SUMMARY --- */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.summary-card {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--primary);
+  border-radius: var(--radius);
+  padding: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.summary-card.constructor-summary {
+  border-left-color: var(--secondary);
+}
+
+.summary-card.turbo-summary {
+  grid-column: 1 / -1;
+  border-left-color: var(--primary);
+  background: rgba(232, 0, 45, 0.04);
+}
+
+.summary-type {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.summary-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.summary-price {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+  .budget-inner { gap: 1rem; }
+  .driver-grid,
+  .constructor-grid,
+  .turbo-grid { grid-template-columns: 1fr 1fr; }
+  .summary-grid { grid-template-columns: 1fr; }
+  .save-btn { margin-left: 0; width: 100%; text-align: center; }
+}

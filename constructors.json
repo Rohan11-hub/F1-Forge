@@ -1,0 +1,13 @@
+[
+  { "id": 1, "name": "Mercedes", "position": 1, "price": 30 },
+  { "id": 2, "name": "Ferrari", "position": 2, "price": 28 },
+  { "id": 3, "name": "McLaren", "position": 3, "price": 26 },
+  { "id": 4, "name": "Red Bull", "position": 4, "price": 24 },
+  { "id": 5, "name": "Alpine", "position": 5, "price": 22 },
+  { "id": 6, "name": "Racing Bulls", "position": 6, "price": 20 },
+  { "id": 7, "name": "Haas", "position": 7, "price": 17 },
+  { "id": 8, "name": "Williams", "position": 8, "price": 14 },
+  { "id": 9, "name": "Audi", "position": 9, "price": 11 },
+  { "id": 10, "name": "Cadillac", "position": 10, "price": 8 },
+  { "id": 11, "name": "Aston Martin", "position": 11, "price": 5 }
+]
