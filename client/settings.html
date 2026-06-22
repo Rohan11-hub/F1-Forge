@@ -1,11 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Settings-F1-Forge</title>
-        <link rel="stylesheet" href="css/global.css">
-    </head>
-    <body>
-    </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings — F1 Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/settings.css">
+</head>
+
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">F1 FORGE</a>
+    <div class="nav-links">
+      <a href="teambuilder.html">Team Builder</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="settings.html" class="active">Settings</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle">DARK</button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div id="settings-header">
+    <div class="centered">
+      <span class="sec-num">ACCOUNT</span>
+      <h2>SETTINGS</h2>
+    </div>
+  </div>
+
+  <main>
+    <div class="centered">
+
+      <!-- PROFILE -->
+      <section class="settings-section">
+        <span class="sec-num">01 — PROFILE</span>
+        <h2>YOUR PROFILE</h2>
+        <div class="profile-grid">
+          <div class="profile-card">
+            <span class="card-label">USERNAME</span>
+            <span class="card-value" id="profileUsername">—</span>
+          </div>
+          <div class="profile-card">
+            <span class="card-label">EMAIL</span>
+            <span class="card-value" id="profileEmail">—</span>
+          </div>
+          <div class="profile-card">
+            <span class="card-label">TOTAL POINTS</span>
+            <span class="card-value points" id="profilePoints">0</span>
+          </div>
+          <div class="profile-card">
+            <span class="card-label">MEMBER SINCE</span>
+            <span class="card-value" id="profileJoined">—</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- CURRENT TEAM -->
+      <section class="settings-section">
+        <span class="sec-num">02 — TEAM</span>
+        <h2>CURRENT TEAM</h2>
+        <div id="currentTeam">
+          <p class="settings-empty">No team saved yet. <a href="teambuilder.html">Build your team →</a></p>
+        </div>
+      </section>
+
+      <!-- CHANGE PASSWORD -->
+      <section class="settings-section">
+        <span class="sec-num">03 — SECURITY</span>
+        <h2>CHANGE PASSWORD</h2>
+        <div class="settings-card">
+          <div class="form-group">
+            <label class="form-label">CURRENT PASSWORD</label>
+            <input type="password" id="currentPassword" class="input" placeholder="••••••••">
+            <span class="form-message" id="currentPwMsg"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">NEW PASSWORD</label>
+            <input type="password" id="newPassword" class="input" placeholder="••••••••">
+            <span class="form-message" id="newPwMsg"></span>
+          </div>
+          <div class="form-group">
+            <label class="form-label">CONFIRM NEW PASSWORD</label>
+            <input type="password" id="confirmPassword" class="input" placeholder="••••••••">
+            <span class="form-message" id="confirmPwMsg"></span>
+          </div>
+          <button class="settings-btn primary" id="changePasswordBtn">UPDATE PASSWORD →</button>
+        </div>
+      </section>
+
+      <!-- THEME -->
+      <section class="settings-section">
+        <span class="sec-num">04 — APPEARANCE</span>
+        <h2>THEME</h2>
+        <div class="theme-options">
+          <div class="theme-option" id="darkOption">
+            <span class="theme-dot dark"></span>
+            <span class="theme-name">DARK MODE</span>
+            <span class="theme-check" id="darkCheck">✓</span>
+          </div>
+          <div class="theme-option" id="lightOption">
+            <span class="theme-dot light"></span>
+            <span class="theme-name">LIGHT MODE</span>
+            <span class="theme-check hidden" id="lightCheck">✓</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- LOGOUT -->
+      <section class="settings-section">
+        <span class="sec-num">05 — ACCOUNT</span>
+        <h2>LOGOUT</h2>
+        <p class="settings-sub">You will be returned to the login page.</p>
+        <button class="settings-btn danger" id="logoutBtn">LOGOUT →</button>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/settings.js"></script>
+
+</body>
 </html>

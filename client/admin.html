@@ -2,14 +2,119 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1-Forge</title>
-    <link rel="stylesheet" href="css/global.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — F1 Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/admin.css">
 </head>
 
 <body>
-    <h1>Admin Login - F1-Forge</h1>
-</body>
 
+  <!-- CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">F1 FORGE</a>
+    <div class="nav-links">
+      <a href="teambuilder.html">Team Builder</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="settings.html">Settings</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle">DARK</button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div id="admin-header">
+    <div class="centered">
+      <span class="sec-num">ADMIN ONLY</span>
+      <h2>ADMIN DASHBOARD</h2>
+      <p class="admin-sub">Enter race results, calculate scores and update the leaderboard.</p>
+    </div>
+  </div>
+
+  <main>
+    <div class="centered">
+
+      <!-- RACE SELECTOR -->
+      <section class="admin-section">
+        <span class="sec-num">01 — RACE</span>
+        <h2>SELECT RACE</h2>
+        <div class="admin-card">
+          <div class="form-group">
+            <label class="form-label">RACE NAME</label>
+            <input type="text" id="raceName" class="input" placeholder="Austrian Grand Prix">
+          </div>
+          <div class="form-group">
+            <label class="form-label">ROUND NUMBER</label>
+            <input type="number" id="raceRound" class="input" placeholder="12" min="1" max="24">
+          </div>
+          <div class="form-group">
+            <label class="form-label">RACE DATE</label>
+            <input type="date" id="raceDate" class="input">
+          </div>
+        </div>
+      </section>
+
+      <!-- GRID POSITIONS -->
+      <section class="admin-section">
+        <span class="sec-num">02 — GRID</span>
+        <h2>STARTING GRID</h2>
+        <p class="admin-sub">Enter each driver's starting grid position.</p>
+        <div class="grid-table" id="gridTable"></div>
+      </section>
+
+      <!-- RACE RESULTS -->
+      <section class="admin-section">
+        <span class="sec-num">03 — RESULTS</span>
+        <h2>FINISHING ORDER</h2>
+        <p class="admin-sub">Enter finishing position or select DNF / DNS / DSQ.</p>
+        <div class="results-table" id="resultsTable"></div>
+      </section>
+
+      <!-- POLE + FASTEST LAP -->
+      <section class="admin-section">
+        <span class="sec-num">04 — BONUSES</span>
+        <h2>POLE & FASTEST LAP</h2>
+        <div class="admin-card">
+          <div class="form-group">
+            <label class="form-label">POLE POSITION</label>
+            <select id="poleDriver" class="input"></select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">FASTEST LAP</label>
+            <select id="fastestLapDriver" class="input"></select>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALCULATE -->
+      <section class="admin-section">
+        <span class="sec-num">05 — CALCULATE</span>
+        <h2>RUN SCORING ENGINE</h2>
+        <div class="admin-actions">
+          <button class="admin-btn primary" id="calculateBtn">CALCULATE SCORES →</button>
+          <button class="admin-btn" id="saveResultsBtn" disabled>SAVE & UPDATE LEADERBOARD →</button>
+        </div>
+        <div class="results-preview hidden" id="resultsPreview">
+          <span class="sec-num">SCORE PREVIEW</span>
+          <div id="previewContent"></div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/scoring.js"></script>
+  <script src="js/admin.js"></script>
+
+</body>
 </html>

@@ -2,14 +2,78 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>F1-Forge</title>
-    <link rel="stylesheet" href="css/global.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard — F1 Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/leaderboard.css">
 </head>
 
 <body>
-    <h1>Leaderboard - F1-Forge</h1>
-</body>
 
+  <!-- CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">F1 FORGE</a>
+    <div class="nav-links">
+      <a href="teambuilder.html">Team Builder</a>
+      <a href="leaderboard.html" class="active">Leaderboard</a>
+      <a href="settings.html">Settings</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle">DARK</button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div id="lb-header">
+    <div class="centered">
+      <span class="sec-num">GLOBAL RANKINGS</span>
+      <h2>LEADERBOARD</h2>
+      <p class="lb-sub">Rankings update after each Grand Prix.</p>
+    </div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <main>
+    <div class="centered">
+
+      <!-- TOP 3 PODIUM -->
+      <section class="podium-section" id="podiumSection"></section>
+
+      <!-- FULL TABLE -->
+      <section class="table-section">
+        <span class="sec-num">ALL PLAYERS</span>
+        <div class="lb-table" id="lbTable">
+          <div class="lb-row lb-header">
+            <span class="col-rank">RANK</span>
+            <span class="col-user">PLAYER</span>
+            <span class="col-pts">POINTS</span>
+            <span class="col-move">MOVE</span>
+          </div>
+          <div id="lbRows"></div>
+        </div>
+      </section>
+
+      <!-- EMPTY STATE -->
+      <div class="empty-state hidden" id="emptyState">
+        <span class="sec-num">NO PLAYERS YET</span>
+        <h2>BE THE FIRST</h2>
+        <p>Sign up and build your team to appear on the leaderboard.</p>
+        <a href="signup.html" class="lb-cta">Sign Up →</a>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/leaderboard.js"></script>
+
+</body>
 </html>

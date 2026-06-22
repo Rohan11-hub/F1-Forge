@@ -8,6 +8,6 @@
   { "id": 7, "name": "Haas", "position": 7, "price": 17 },
   { "id": 8, "name": "Williams", "position": 8, "price": 14 },
   { "id": 9, "name": "Audi", "position": 9, "price": 11 },
-  { "id": 10, "name": "Cadillac", "position": 10, "price": 8 },
-  { "id": 11, "name": "Aston Martin", "position": 11, "price": 5 }
+  { "id": 10, "name": "Aston Martin", "position": 10, "price": 8 },
+  { "id": 11, "name": "Cadillac", "position": 11, "price": 5 }
 ]
