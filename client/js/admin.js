@@ -1,20 +1,36 @@
 /* ============================================================
    F1 FORGE — admin.js
+   API version
    ============================================================ */
 
-let drivers = [];
-let raceResults = {
-  grid: {},
-  finish: {},
-  status: {},
-  pole: null,
+const TOKEN = () => localStorage.getItem('f1forge_token');
+
+// Redirect if not logged in or not admin
+const user = JSON.parse(localStorage.getItem('f1forge_user') || 'null');
+if (!user || !user.isAdmin) {
+  alert('Admin access only.');
+  window.location.href = 'index.html';
+}
+
+let drivers      = [];
+let constructors = [];
+let raceResults  = {
+  grid:       {},
+  finish:     {},
+  status:     {},
+  pole:       null,
   fastestLap: null
 };
 
 // --- LOAD DRIVERS ---
 async function loadDrivers() {
-  const res = await fetch('data/drivers.json');
-  drivers = await res.json();
+  const [dRes, cRes] = await Promise.all([
+    fetch('data/drivers.json'),
+    fetch('data/constructors.json')
+  ]);
+  drivers      = await dRes.json();
+  constructors = await cRes.json();
+
   renderGridTable();
   renderResultsTable();
   populateSelects();
@@ -94,7 +110,7 @@ function setStatus(id, value) {
   }
 }
 
-// --- POLE + FASTEST LAP SELECTS ---
+// --- POLE + FASTEST LAP ---
 function populateSelects() {
   const poleSelect    = document.getElementById('poleDriver');
   const fastestSelect = document.getElementById('fastestLapDriver');
@@ -118,123 +134,63 @@ function populateSelects() {
   });
 }
 
-// --- CALCULATE SCORES ---
-document.getElementById('calculateBtn').addEventListener('click', () => {
-  const users = JSON.parse(localStorage.getItem('f1forge_users') || '[]');
+// --- CALCULATE & SAVE ---
+document.getElementById('calculateBtn').addEventListener('click', async () => {
+  const name  = document.getElementById('raceName').value;
+  const round = document.getElementById('raceRound').value;
+  const date  = document.getElementById('raceDate').value;
 
-  if (users.length === 0) {
-    alert('No users found. Have players sign up first.');
+  if (!name || !round) {
+    alert('Enter race name and round number first.');
     return;
   }
 
   const preview        = document.getElementById('resultsPreview');
   const previewContent = document.getElementById('previewContent');
-  previewContent.innerHTML = '';
+  previewContent.innerHTML = '<p class="turbo-placeholder">Calculating...</p>';
+  preview.classList.remove('hidden');
 
-  users.forEach(user => {
-    if (!user.team) return;
-
-    const { drivers: teamDrivers, constructors: teamConstructors, turbo } = user.team;
-    let totalScore = 0;
-
-    // Driver scores
-    teamDrivers.forEach(driverId => {
-      const finish    = raceResults.finish[driverId];
-      const grid      = raceResults.grid[driverId];
-      const status    = raceResults.status[driverId];
-      const isPole    = raceResults.pole === driverId;
-      const isFastest = raceResults.fastestLap === driverId;
-
-      if (!finish && !status) return;
-
-      const result = {
-        finish:     status || finish,
-        gridStart:  grid || finish,
-        pole:       isPole,
-        fastestLap: isFastest
-      };
-
-      let score = calculateDriverScore(result);
-      if (driverId === turbo) score = applyTurboMultiplier(score);
-      totalScore += score;
+  try {
+    const res = await fetch('/api/admin/results', {
+      method:  'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + TOKEN()
+      },
+      body: JSON.stringify({
+        name,
+        round:        parseInt(round),
+        date,
+        grid:         raceResults.grid,
+        finish:       raceResults.finish,
+        status:       raceResults.status,
+        pole:         raceResults.pole,
+        fastestLap:   raceResults.fastestLap,
+        drivers,
+        constructors
+      })
     });
 
-    // Constructor scores
-    if (teamConstructors) {
-      teamConstructors.forEach(constructorId => {
-        const constructorDrivers = drivers.filter(d => {
-          const c = getConstructorById(constructorId);
-          return c && d.team === c.name;
-        });
+    const data = await res.json();
 
-        if (constructorDrivers.length < 2) return;
-
-        const d1Result = getDriverResult(constructorDrivers[0].id);
-        const d2Result = getDriverResult(constructorDrivers[1].id);
-
-        if (d1Result && d2Result) {
-          totalScore += calculateConstructorScore({ driver1Result: d1Result, driver2Result: d2Result });
-        }
-      });
+    if (!res.ok) {
+      previewContent.innerHTML = `<p class="turbo-placeholder" style="color:var(--error)">${data.message}</p>`;
+      return;
     }
 
-    // Update user points
-    user.points = (user.points || 0) + totalScore;
+    previewContent.innerHTML = `<p class="turbo-placeholder" style="color:var(--success)">✓ ${data.message}</p>`;
+    document.getElementById('saveResultsBtn').disabled = false;
 
-    // Add to preview
-    const row = document.createElement('div');
-    row.className = 'preview-row';
-    row.innerHTML = `
-      <span>${user.username.toUpperCase()}</span>
-      <span class="preview-pts ${totalScore >= 0 ? 'positive' : 'negative'}">
-        ${totalScore >= 0 ? '+' : ''}${totalScore} PTS
-      </span>
-    `;
-    previewContent.appendChild(row);
-  });
-
-  preview.classList.remove('hidden');
-  document.getElementById('saveResultsBtn').disabled = false;
-
-  // Save updated users back
-  localStorage.setItem('f1forge_users', JSON.stringify(users));
+  } catch (err) {
+    previewContent.innerHTML = '<p class="turbo-placeholder" style="color:var(--error)">Server error. Try again.</p>';
+  }
 });
 
 // --- SAVE RESULTS ---
 document.getElementById('saveResultsBtn').addEventListener('click', () => {
-  const race = {
-    name:      document.getElementById('raceName').value || 'Unknown Race',
-    round:     document.getElementById('raceRound').value || '?',
-    date:      document.getElementById('raceDate').value || '',
-    results:   raceResults,
-    savedAt:   new Date().toISOString()
-  };
-
-  const races = JSON.parse(localStorage.getItem('f1forge_races') || '[]');
-  races.push(race);
-  localStorage.setItem('f1forge_races', JSON.stringify(races));
-
-  alert('Results saved! Leaderboard updated.');
+  alert('Results saved and leaderboard updated!');
   document.getElementById('saveResultsBtn').disabled = true;
 });
-
-// --- HELPERS ---
-function getDriverResult(driverId) {
-  const finish = raceResults.finish[driverId];
-  const status = raceResults.status[driverId];
-  if (!finish && !status) return null;
-  return {
-    finish:     status || finish,
-    gridStart:  raceResults.grid[driverId] || finish,
-    pole:       raceResults.pole === driverId,
-    fastestLap: raceResults.fastestLap === driverId
-  };
-}
-
-function getConstructorById(id) {
-  const constructors = JSON.parse(localStorage.getItem('f1forge_constructors') || '[]');
-  return constructors.find(c => c.id === id);
-}
 
 // --- INIT ---
 loadDrivers();

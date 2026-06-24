@@ -1,12 +1,13 @@
 /* ============================================================
    F1 FORGE — teambuilder.js
+   API version
    ============================================================ */
 
 const BUDGET = 150;
+const TOKEN  = () => localStorage.getItem('f1forge_token');
 
 let drivers      = [];
 let constructors = [];
-
 let selectedDrivers      = [];
 let selectedConstructors = [];
 let turboDriver          = null;
@@ -20,12 +21,21 @@ async function loadData() {
   drivers      = await dRes.json();
   constructors = await cRes.json();
 
-  // Load saved team from localStorage
-  const saved = JSON.parse(localStorage.getItem('f1forge_team') || 'null');
-  if (saved) {
-    selectedDrivers      = saved.drivers      || [];
-    selectedConstructors = saved.constructors || [];
-    turboDriver          = saved.turbo        || null;
+  // Load saved team from API
+  if (TOKEN()) {
+    try {
+      const res = await fetch('/api/team', {
+        headers: { 'Authorization': 'Bearer ' + TOKEN() }
+      });
+      if (res.ok) {
+        const team = await res.json();
+        selectedDrivers      = team.drivers      || [];
+        selectedConstructors = team.constructors || [];
+        turboDriver          = team.turbo        || null;
+      }
+    } catch (err) {
+      console.log('No saved team found.');
+    }
   }
 
   renderDrivers();
@@ -72,9 +82,9 @@ function renderDrivers() {
   grid.innerHTML = '';
 
   drivers.forEach(driver => {
-    const selected  = selectedDrivers.includes(driver.id);
-    const maxed     = selectedDrivers.length >= 5 && !selected;
-    const isTurbo   = turboDriver === driver.id;
+    const selected = selectedDrivers.includes(driver.id);
+    const maxed    = selectedDrivers.length >= 5 && !selected;
+    const isTurbo  = turboDriver === driver.id;
 
     const card = document.createElement('div');
     card.className = 'driver-card' +
@@ -234,24 +244,46 @@ function updateSummary() {
 }
 
 // --- SAVE TEAM ---
-document.getElementById('saveTeamBtn').addEventListener('click', () => {
-  const team = {
-    drivers:      selectedDrivers,
-    constructors: selectedConstructors,
-    turbo:        turboDriver,
-    savedAt:      new Date().toISOString()
-  };
-
-  localStorage.setItem('f1forge_team', JSON.stringify(team));
-
-  // Update current user
-  const user = JSON.parse(localStorage.getItem('f1forge_current') || 'null');
-  if (user) {
-    user.team = team;
-    localStorage.setItem('f1forge_current', JSON.stringify(user));
+document.getElementById('saveTeamBtn').addEventListener('click', async () => {
+  if (!TOKEN()) {
+    alert('You must be logged in to save a team.');
+    window.location.href = 'login.html';
+    return;
   }
 
-  alert('Team saved successfully!');
+  const totalCost = getTotalCost();
+
+  try {
+    const res = await fetch('/api/team/save', {
+      method:  'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + TOKEN()
+      },
+      body: JSON.stringify({
+        drivers:      selectedDrivers,
+        constructors: selectedConstructors,
+        turbo:        turboDriver,
+        totalCost
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || 'Failed to save team.');
+      return;
+    }
+
+    if (data.penaltyPoints) {
+      alert(`Team saved! Note: ${data.extraTransfers} extra transfer(s) = ${data.penaltyPoints} points penalty.`);
+    } else {
+      alert('Team saved successfully!');
+    }
+
+  } catch (err) {
+    alert('Server error. Try again.');
+  }
 });
 
 // --- INIT ---

@@ -1,79 +1,111 @@
 /* ============================================================
    F1 FORGE — settings.js
+   API version
    ============================================================ */
 
-const user = JSON.parse(localStorage.getItem('f1forge_current') || 'null');
+const TOKEN = () => localStorage.getItem('f1forge_token');
+let currentUser = JSON.parse(localStorage.getItem('f1forge_user') || 'null');
 
 // Redirect if not logged in
-if (!user) window.location.href = 'login.html';
+if (!TOKEN()) window.location.href = 'login.html';
 
 // --- LOAD PROFILE ---
-function loadProfile() {
-  document.getElementById('profileUsername').textContent = user.username || '—';
-  document.getElementById('profileEmail').textContent    = user.email    || '—';
-  document.getElementById('profilePoints').textContent   = user.points   || 0;
-
-  if (user.joined) {
-    const date = new Date(user.joined);
-    document.getElementById('profileJoined').textContent = date.toLocaleDateString('en-GB', {
-      day: 'numeric', month: 'short', year: 'numeric'
+async function loadProfile() {
+  try {
+    const res  = await fetch('/api/auth/me', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN() }
     });
+
+    if (!res.ok) {
+      localStorage.removeItem('f1forge_token');
+      localStorage.removeItem('f1forge_user');
+      window.location.href = 'login.html';
+      return;
+    }
+
+    const user = await res.json();
+    currentUser = user;
+    localStorage.setItem('f1forge_user', JSON.stringify(user));
+
+    document.getElementById('profileUsername').textContent = user.username || '—';
+    document.getElementById('profileEmail').textContent    = user.email    || '—';
+    document.getElementById('profilePoints').textContent   = user.points   || 0;
+
+    if (user.joined) {
+      const date = new Date(user.joined);
+      document.getElementById('profileJoined').textContent = date.toLocaleDateString('en-GB', {
+        day: 'numeric', month: 'short', year: 'numeric'
+      });
+    }
+
+  } catch (err) {
+    console.error('Failed to load profile:', err);
   }
 }
 
 // --- LOAD TEAM ---
 async function loadTeam() {
-  const team = user.team;
   const container = document.getElementById('currentTeam');
 
-  if (!team) {
+  try {
+    const res = await fetch('/api/team', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN() }
+    });
+
+    if (!res.ok) {
+      container.innerHTML = '<p class="settings-empty">No team saved yet. <a href="teambuilder.html">Build your team →</a></p>';
+      return;
+    }
+
+    const team = await res.json();
+
+    const [dRes, cRes] = await Promise.all([
+      fetch('data/drivers.json'),
+      fetch('data/constructors.json')
+    ]);
+    const drivers      = await dRes.json();
+    const constructors = await cRes.json();
+
+    const grid = document.createElement('div');
+    grid.className = 'team-grid';
+
+    team.drivers.forEach(id => {
+      const driver  = drivers.find(d => d.id === id);
+      if (!driver) return;
+      const isTurbo = team.turbo === id;
+      const card    = document.createElement('div');
+      card.className = 'team-card' + (isTurbo ? ' turbo' : '');
+      card.innerHTML = `
+        <span class="team-type">DRIVER${isTurbo ? ' · ⚡ TURBO' : ''}</span>
+        <span class="team-name">${driver.name.toUpperCase()}</span>
+        <span class="team-price">${driver.team} · ${driver.price}M</span>
+      `;
+      grid.appendChild(card);
+    });
+
+    team.constructors.forEach(id => {
+      const constructor = constructors.find(c => c.id === id);
+      if (!constructor) return;
+      const card = document.createElement('div');
+      card.className = 'team-card';
+      card.innerHTML = `
+        <span class="team-type">CONSTRUCTOR</span>
+        <span class="team-name">${constructor.name.toUpperCase()}</span>
+        <span class="team-price">${constructor.price}M</span>
+      `;
+      grid.appendChild(card);
+    });
+
+    container.innerHTML = '';
+    container.appendChild(grid);
+
+  } catch (err) {
     container.innerHTML = '<p class="settings-empty">No team saved yet. <a href="teambuilder.html">Build your team →</a></p>';
-    return;
   }
-
-  const [dRes, cRes] = await Promise.all([
-    fetch('data/drivers.json'),
-    fetch('data/constructors.json')
-  ]);
-  const drivers      = await dRes.json();
-  const constructors = await cRes.json();
-
-  const grid = document.createElement('div');
-  grid.className = 'team-grid';
-
-  team.drivers.forEach(id => {
-    const driver  = drivers.find(d => d.id === id);
-    if (!driver) return;
-    const isTurbo = team.turbo === id;
-    const card    = document.createElement('div');
-    card.className = 'team-card' + (isTurbo ? ' turbo' : '');
-    card.innerHTML = `
-      <span class="team-type">DRIVER${isTurbo ? ' · ⚡ TURBO' : ''}</span>
-      <span class="team-name">${driver.name.toUpperCase()}</span>
-      <span class="team-price">${driver.team} · ${driver.price}M</span>
-    `;
-    grid.appendChild(card);
-  });
-
-  team.constructors.forEach(id => {
-    const constructor = constructors.find(c => c.id === id);
-    if (!constructor) return;
-    const card = document.createElement('div');
-    card.className = 'team-card';
-    card.innerHTML = `
-      <span class="team-type">CONSTRUCTOR</span>
-      <span class="team-name">${constructor.name.toUpperCase()}</span>
-      <span class="team-price">${constructor.price}M</span>
-    `;
-    grid.appendChild(card);
-  });
-
-  container.innerHTML = '';
-  container.appendChild(grid);
 }
 
 // --- CHANGE PASSWORD ---
-document.getElementById('changePasswordBtn').addEventListener('click', () => {
+document.getElementById('changePasswordBtn').addEventListener('click', async () => {
   const current = document.getElementById('currentPassword');
   const newPw   = document.getElementById('newPassword');
   const confirm = document.getElementById('confirmPassword');
@@ -81,8 +113,8 @@ document.getElementById('changePasswordBtn').addEventListener('click', () => {
   clearMessages();
   let valid = true;
 
-  if (current.value !== user.password) {
-    showMsg('currentPwMsg', 'Incorrect current password.', 'error');
+  if (!current.value) {
+    showMsg('currentPwMsg', 'Enter your current password.', 'error');
     current.classList.add('error');
     valid = false;
   }
@@ -101,21 +133,36 @@ document.getElementById('changePasswordBtn').addEventListener('click', () => {
 
   if (!valid) return;
 
-  // Update password
-  const users   = JSON.parse(localStorage.getItem('f1forge_users') || '[]');
-  const userIdx = users.findIndex(u => u.email === user.email);
-  if (userIdx !== -1) {
-    users[userIdx].password = newPw.value;
-    user.password = newPw.value;
-    localStorage.setItem('f1forge_users', JSON.stringify(users));
-    localStorage.setItem('f1forge_current', JSON.stringify(user));
-  }
+  try {
+    const res  = await fetch('/api/auth/password', {
+      method:  'PUT',
+      headers: {
+        'Content-Type':  'application/json',
+        'Authorization': 'Bearer ' + TOKEN()
+      },
+      body: JSON.stringify({
+        currentPassword: current.value,
+        newPassword:     newPw.value
+      })
+    });
 
-  showMsg('newPwMsg', 'Password updated successfully.', 'success');
-  newPw.classList.add('success');
-  current.value = '';
-  newPw.value   = '';
-  confirm.value = '';
+    const data = await res.json();
+
+    if (!res.ok) {
+      showMsg('currentPwMsg', data.message, 'error');
+      current.classList.add('error');
+      return;
+    }
+
+    showMsg('newPwMsg', 'Password updated successfully.', 'success');
+    newPw.classList.add('success');
+    current.value = '';
+    newPw.value   = '';
+    confirm.value = '';
+
+  } catch (err) {
+    showMsg('currentPwMsg', 'Server error. Try again.', 'error');
+  }
 });
 
 // --- THEME ---
@@ -148,7 +195,8 @@ updateThemeUI();
 
 // --- LOGOUT ---
 document.getElementById('logoutBtn').addEventListener('click', () => {
-  localStorage.removeItem('f1forge_current');
+  localStorage.removeItem('f1forge_token');
+  localStorage.removeItem('f1forge_user');
   window.location.href = 'login.html';
 });
 

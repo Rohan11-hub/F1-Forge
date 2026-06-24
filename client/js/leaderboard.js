@@ -1,82 +1,90 @@
 /* ============================================================
    F1 FORGE — leaderboard.js
+   API version
    ============================================================ */
 
-function loadLeaderboard() {
-  const users       = JSON.parse(localStorage.getItem('f1forge_users') || '[]');
-  const currentUser = JSON.parse(localStorage.getItem('f1forge_current') || 'null');
+const currentUser = JSON.parse(localStorage.getItem('f1forge_user') || 'null');
 
+async function loadLeaderboard() {
   const podiumSection = document.getElementById('podiumSection');
   const lbRows        = document.getElementById('lbRows');
   const emptyState    = document.getElementById('emptyState');
   const tableSection  = document.querySelector('.table-section');
 
-  // No users
-  if (users.length === 0) {
-    podiumSection.classList.add('hidden');
-    tableSection.classList.add('hidden');
-    emptyState.classList.remove('hidden');
-    return;
-  }
+  try {
+    const res  = await fetch('/api/leaderboard');
+    const data = await res.json();
 
-  // Sort by points descending
-  const sorted = [...users].sort((a, b) => (b.points || 0) - (a.points || 0));
-
-  // --- PODIUM (top 3) ---
-  podiumSection.innerHTML = '';
-  const podiumClasses = ['p1', 'p2', 'p3'];
-  const podiumLabels  = ['1ST', '2ND', '3RD'];
-
-  sorted.slice(0, 3).forEach((user, i) => {
-    const card = document.createElement('div');
-    card.className = `podium-card ${podiumClasses[i]}`;
-    card.innerHTML = `
-      <span class="podium-rank">${podiumLabels[i]}</span>
-      <span class="podium-name">${user.username.toUpperCase()}</span>
-      <span class="podium-pts">${user.points || 0} PTS</span>
-    `;
-    podiumSection.appendChild(card);
-  });
-
-  // Hide podium if less than 3 users
-  if (sorted.length < 3) {
-    const needed = 3 - sorted.length;
-    for (let i = 0; i < needed; i++) {
-      const empty = document.createElement('div');
-      empty.className = `podium-card ${podiumClasses[sorted.length + i]}`;
-      empty.innerHTML = `
-        <span class="podium-rank">${podiumLabels[sorted.length + i]}</span>
-        <span class="podium-name" style="color:var(--muted)">—</span>
-        <span class="podium-pts">0 PTS</span>
-      `;
-      podiumSection.appendChild(empty);
+    if (!data || data.length === 0) {
+      podiumSection.classList.add('hidden');
+      tableSection.classList.add('hidden');
+      emptyState.classList.remove('hidden');
+      return;
     }
+
+    // --- PODIUM ---
+    podiumSection.innerHTML = '';
+    const podiumClasses = ['p1', 'p2', 'p3'];
+    const podiumLabels  = ['1ST', '2ND', '3RD'];
+
+    const top3 = data.slice(0, 3);
+    top3.forEach((player, i) => {
+      const card = document.createElement('div');
+      card.className = `podium-card ${podiumClasses[i]}`;
+      card.innerHTML = `
+        <span class="podium-rank">${podiumLabels[i]}</span>
+        <span class="podium-name">${player.username.toUpperCase()}</span>
+        <span class="podium-pts">${player.points} PTS</span>
+      `;
+      podiumSection.appendChild(card);
+    });
+
+    // Fill empty podium spots
+    if (top3.length < 3) {
+      for (let i = top3.length; i < 3; i++) {
+        const empty = document.createElement('div');
+        empty.className = `podium-card ${podiumClasses[i]}`;
+        empty.innerHTML = `
+          <span class="podium-rank">${podiumLabels[i]}</span>
+          <span class="podium-name" style="color:var(--muted)">—</span>
+          <span class="podium-pts">0 PTS</span>
+        `;
+        podiumSection.appendChild(empty);
+      }
+    }
+
+    // --- FULL TABLE ---
+    lbRows.innerHTML = '';
+
+    data.forEach((player) => {
+      const isCurrent = currentUser && player.username === currentUser.username;
+      const row       = document.createElement('div');
+      row.className   = 'lb-row' + (isCurrent ? ' current-user' : '');
+
+      let moveHTML = '<span class="col-move move-same">—</span>';
+      if (player.movement > 0) {
+        moveHTML = `<span class="col-move move-up">▲${player.movement}</span>`;
+      } else if (player.movement < 0) {
+        moveHTML = `<span class="col-move move-down">▼${Math.abs(player.movement)}</span>`;
+      }
+
+      row.innerHTML = `
+        <span class="col-rank ${player.rank <= 3 ? 'top' : ''}">${player.rank}</span>
+        <div class="col-user">
+          <span class="user-name">${player.username.toUpperCase()}</span>
+          <span class="user-tag">${isCurrent ? 'YOU' : 'PLAYER'}</span>
+        </div>
+        <span class="col-pts">${player.points}</span>
+        ${moveHTML}
+      `;
+
+      lbRows.appendChild(row);
+    });
+
+  } catch (err) {
+    console.error('Failed to load leaderboard:', err);
+    emptyState.classList.remove('hidden');
   }
-
-  // --- FULL TABLE ---
-  lbRows.innerHTML = '';
-
-  sorted.forEach((user, i) => {
-    const rank        = i + 1;
-    const isCurrent   = currentUser && user.email === currentUser.email;
-    const row         = document.createElement('div');
-    row.className     = 'lb-row' + (isCurrent ? ' current-user' : '');
-
-    // Movement placeholder (Phase 2 will track real movement)
-    const moveHTML = '<span class="col-move move-same">—</span>';
-
-    row.innerHTML = `
-      <span class="col-rank ${rank <= 3 ? 'top' : ''}">${rank}</span>
-      <div class="col-user">
-        <span class="user-name">${user.username.toUpperCase()}</span>
-        <span class="user-tag">${isCurrent ? 'YOU' : 'PLAYER'}</span>
-      </div>
-      <span class="col-pts">${user.points || 0}</span>
-      ${moveHTML}
-    `;
-
-    lbRows.appendChild(row);
-  });
 }
 
 loadLeaderboard();

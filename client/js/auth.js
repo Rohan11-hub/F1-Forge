@@ -1,7 +1,9 @@
 /* ============================================================
    F1 FORGE — auth.js
-   Login & Signup validation
+   Login & Signup — API version
    ============================================================ */
+
+const API = '/api/auth';
 
 // --- HELPERS ---
 function showMsg(id, message, type) {
@@ -23,64 +25,70 @@ function setInputState(input, state) {
   if (state) input.classList.add(state);
 }
 
-// --- VALIDATION RULES ---
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePassword(password) {
-  return password.length >= 6;
-}
-
-function validateUsername(username) {
-  return username.trim().length >= 3;
 }
 
 // --- LOGIN ---
 const loginForm = document.getElementById('loginForm');
 
 if (loginForm) {
-  loginForm.addEventListener('submit', (e) => {
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const email    = document.getElementById('loginEmail');
     const password = document.getElementById('loginPassword');
-    let valid = true;
+    const btn      = document.getElementById('loginBtn');
 
     clearMsg('emailMsg');
     clearMsg('passwordMsg');
+    let valid = true;
 
     if (!validateEmail(email.value)) {
       showMsg('emailMsg', 'Enter a valid email address.', 'error');
       setInputState(email, 'error');
       valid = false;
-    } else {
-      setInputState(email, 'success');
     }
 
-    if (!validatePassword(password.value)) {
+    if (password.value.length < 6) {
       showMsg('passwordMsg', 'Password must be at least 6 characters.', 'error');
       setInputState(password, 'error');
       valid = false;
-    } else {
-      setInputState(password, 'success');
     }
 
     if (!valid) return;
 
-    // Phase 1: localStorage check
-    const users = JSON.parse(localStorage.getItem('f1forge_users') || '[]');
-    const user  = users.find(u => u.email === email.value && u.password === password.value);
+    btn.textContent = 'LOGGING IN...';
+    btn.disabled    = true;
 
-    if (!user) {
-      showMsg('emailMsg', 'Incorrect email or password.', 'error');
-      setInputState(email, 'error');
-      setInputState(password, 'error');
-      return;
+    try {
+      const res  = await fetch(`${API}/login`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ email: email.value, password: password.value })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showMsg('emailMsg', data.message || 'Login failed.', 'error');
+        setInputState(email, 'error');
+        setInputState(password, 'error');
+        btn.textContent = 'LOGIN →';
+        btn.disabled    = false;
+        return;
+      }
+
+      localStorage.setItem('f1forge_token', data.token);
+      localStorage.setItem('f1forge_user',  JSON.stringify(data.user));
+
+      window.location.href = 'index.html';
+
+    } catch (err) {
+      showMsg('emailMsg', 'Server error. Try again.', 'error');
+      btn.textContent = 'LOGIN →';
+      btn.disabled    = false;
     }
-
-    localStorage.setItem('f1forge_current', JSON.stringify(user));
-    window.location.href = 'index.html';
   });
 }
 
@@ -88,76 +96,81 @@ if (loginForm) {
 const signupForm = document.getElementById('signupForm');
 
 if (signupForm) {
-  signupForm.addEventListener('submit', (e) => {
+  signupForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
     const username = document.getElementById('signupUsername');
     const email    = document.getElementById('signupEmail');
     const password = document.getElementById('signupPassword');
     const confirm  = document.getElementById('signupConfirm');
-    let valid = true;
+    const btn      = document.getElementById('signupBtn');
 
     clearMsg('usernameMsg');
     clearMsg('emailMsg');
     clearMsg('passwordMsg');
     clearMsg('confirmMsg');
 
-    if (!validateUsername(username.value)) {
+    let valid = true;
+
+    if (username.value.trim().length < 3) {
       showMsg('usernameMsg', 'Username must be at least 3 characters.', 'error');
       setInputState(username, 'error');
       valid = false;
-    } else {
-      setInputState(username, 'success');
-    }
+    } else { setInputState(username, 'success'); }
 
     if (!validateEmail(email.value)) {
       showMsg('emailMsg', 'Enter a valid email address.', 'error');
       setInputState(email, 'error');
       valid = false;
-    } else {
-      setInputState(email, 'success');
-    }
+    } else { setInputState(email, 'success'); }
 
-    if (!validatePassword(password.value)) {
+    if (password.value.length < 6) {
       showMsg('passwordMsg', 'Password must be at least 6 characters.', 'error');
       setInputState(password, 'error');
       valid = false;
-    } else {
-      setInputState(password, 'success');
-    }
+    } else { setInputState(password, 'success'); }
 
     if (confirm.value !== password.value) {
       showMsg('confirmMsg', 'Passwords do not match.', 'error');
       setInputState(confirm, 'error');
       valid = false;
-    } else if (confirm.value) {
-      setInputState(confirm, 'success');
-    }
+    } else if (confirm.value) { setInputState(confirm, 'success'); }
 
     if (!valid) return;
 
-    // Phase 1: localStorage
-    const users = JSON.parse(localStorage.getItem('f1forge_users') || '[]');
+    btn.textContent = 'CREATING ACCOUNT...';
+    btn.disabled    = true;
 
-    if (users.find(u => u.email === email.value)) {
-      showMsg('emailMsg', 'An account with this email already exists.', 'error');
-      setInputState(email, 'error');
-      return;
+    try {
+      const res  = await fetch(`${API}/signup`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          username: username.value.trim(),
+          email:    email.value,
+          password: password.value
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        const field = data.message.toLowerCase().includes('email') ? 'emailMsg' : 'usernameMsg';
+        showMsg(field, data.message, 'error');
+        btn.textContent = 'CREATE ACCOUNT →';
+        btn.disabled    = false;
+        return;
+      }
+
+      localStorage.setItem('f1forge_token', data.token);
+      localStorage.setItem('f1forge_user',  JSON.stringify(data.user));
+
+      window.location.href = 'teambuilder.html';
+
+    } catch (err) {
+      showMsg('emailMsg', 'Server error. Try again.', 'error');
+      btn.textContent = 'CREATE ACCOUNT →';
+      btn.disabled    = false;
     }
-
-    const newUser = {
-      username: username.value.trim(),
-      email:    email.value,
-      password: password.value,
-      points:   0,
-      team:     null,
-      joined:   new Date().toISOString()
-    };
-
-    users.push(newUser);
-    localStorage.setItem('f1forge_users', JSON.stringify(users));
-    localStorage.setItem('f1forge_current', JSON.stringify(newUser));
-
-    window.location.href = 'teambuilder.html';
   });
 }
