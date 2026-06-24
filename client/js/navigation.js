@@ -1,67 +1,120 @@
 /* ============================================================
    F1 FORGE — navigation.js
-   Cursor + Nav + Theme
+   Cursor + Theme + Animations + Auth Nav
    ============================================================ */
 
-// --- CUSTOM CURSOR ---
-const dot  = document.querySelector('.cursor-dot');
+// ============================================================
+// CUSTOM CURSOR
+// ============================================================
+
+const dot = document.querySelector('.cursor-dot');
 const ring = document.querySelector('.cursor-ring');
 
-document.addEventListener('mousemove', (e) => {
-  dot.style.left  = e.clientX + 'px';
-  dot.style.top   = e.clientY + 'px';
-  setTimeout(() => {
-    ring.style.left = e.clientX + 'px';
-    ring.style.top  = e.clientY + 'px';
-  }, 80);
-});
+if (dot && ring) {
+  document.addEventListener('mousemove', (e) => {
+    dot.style.left = e.clientX + 'px';
+    dot.style.top = e.clientY + 'px';
 
-const hoverTargets = document.querySelectorAll(
-  'a, button, .result-card, .step, .turbo-card, .race-banner, .maker-card'
-);
+    requestAnimationFrame(() => {
+      ring.style.left = e.clientX + 'px';
+      ring.style.top = e.clientY + 'px';
+    });
+  });
 
-hoverTargets.forEach(el => {
-  el.addEventListener('mouseenter', () => ring.classList.add('hovering'));
-  el.addEventListener('mouseleave', () => ring.classList.remove('hovering'));
-});
+  const hoverTargets = document.querySelectorAll(
+    'a, button, .result-card, .step, .turbo-card, .race-banner, .maker-card'
+  );
 
-// --- ACTIVE NAV LINK ---
-const navLinks = document.querySelectorAll('.nav-links a');
-const current  = window.location.pathname.split('/').pop();
+  hoverTargets.forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.classList.add('hovering');
+    });
 
-navLinks.forEach(link => {
-  if (link.getAttribute('href') === current) {
-    link.classList.add('active');
-  }
-});
+    el.addEventListener('mouseleave', () => {
+      ring.classList.remove('hovering');
+    });
+  });
+}
 
-// --- THEME TOGGLE ---
-const toggle    = document.getElementById('themeToggle');
+// ============================================================
+// THEME TOGGLE
+// ============================================================
+
+const themeToggle = document.getElementById('themeToggle');
 const savedTheme = localStorage.getItem('theme');
 
 if (savedTheme === 'light') {
   document.body.classList.add('light-mode');
-  if (toggle) toggle.textContent = 'LIGHT';
+
+  if (themeToggle) {
+    themeToggle.textContent = 'LIGHT';
+  }
 }
 
-if (toggle) {
-  toggle.addEventListener('click', () => {
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('light-mode');
-    const isLight = document.body.classList.contains('light-mode');
-    toggle.textContent = isLight ? 'LIGHT' : 'DARK';
-    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+
+    const isLight =
+      document.body.classList.contains('light-mode');
+
+    localStorage.setItem(
+      'theme',
+      isLight ? 'light' : 'dark'
+    );
+
+    themeToggle.textContent =
+      isLight ? 'LIGHT' : 'DARK';
   });
 }
 
-// --- SCROLL FADE IN ---
-const faders = document.querySelectorAll('.fade-in');
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      observer.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15 });
+// ============================================================
+// AUTH NAV
+// ============================================================
 
-faders.forEach(el => observer.observe(el));
+const token = localStorage.getItem('f1forge_token');
+
+const loginBtn = document.querySelector('a[href="login.html"]');
+const signupBtn = document.querySelector('a[href="signup.html"]');
+
+if (token) {
+  if (loginBtn) loginBtn.style.display = 'none';
+  if (signupBtn) signupBtn.style.display = 'none';
+}
+
+// ============================================================
+// SCROLL FADE-IN
+// ============================================================
+
+const faders = document.querySelectorAll('.fade-in');
+
+if (faders.length > 0) {
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      threshold: 0.15
+    }
+  );
+
+  faders.forEach(el => observer.observe(el));
+}
+
+// ============================================================
+// MOBILE HAMBURGER (FUTURE)
+// ============================================================
+
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+if (hamburger && mobileMenu) {
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+}
