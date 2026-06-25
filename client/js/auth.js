@@ -3,7 +3,7 @@
    Login & Signup — API version
    ============================================================ */
 
-const API = '/api/auth';
+const API = 'https://f1-forge.onrender.com/api/auth';
 
 // --- HELPERS ---
 function showMsg(id, message, type) {

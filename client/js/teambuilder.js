@@ -24,7 +24,7 @@ async function loadData() {
   // Load saved team from API
   if (TOKEN()) {
     try {
-      const res = await fetch('/api/team', {
+      const res = await fetch('https://f1-forge.onrender.com/api/team', {
         headers: { 'Authorization': 'Bearer ' + TOKEN() }
       });
       if (res.ok) {
@@ -254,7 +254,7 @@ document.getElementById('saveTeamBtn').addEventListener('click', async () => {
   const totalCost = getTotalCost();
 
   try {
-    const res = await fetch('/api/team/save', {
+    const res = await fetch('https://f1-forge.onrender.com/api/team/save', {
       method:  'POST',
       headers: {
         'Content-Type':  'application/json',

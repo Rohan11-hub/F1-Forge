@@ -12,7 +12,7 @@ if (!TOKEN()) window.location.href = 'login.html';
 // --- LOAD PROFILE ---
 async function loadProfile() {
   try {
-    const res  = await fetch('/api/auth/me', {
+    const res  = await fetch('https://f1-forge.onrender.com/api/auth/me', {
       headers: { 'Authorization': 'Bearer ' + TOKEN() }
     });
 
@@ -48,7 +48,7 @@ async function loadTeam() {
   const container = document.getElementById('currentTeam');
 
   try {
-    const res = await fetch('/api/team', {
+    const res = await fetch('https://f1-forge.onrender.com/api/team', {
       headers: { 'Authorization': 'Bearer ' + TOKEN() }
     });
 
@@ -134,7 +134,7 @@ document.getElementById('changePasswordBtn').addEventListener('click', async () 
   if (!valid) return;
 
   try {
-    const res  = await fetch('/api/auth/password', {
+    const res  = await fetch('https://f1-forge.onrender.com/api/auth/password', {
       method:  'PUT',
       headers: {
         'Content-Type':  'application/json',

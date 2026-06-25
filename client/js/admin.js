@@ -151,7 +151,7 @@ document.getElementById('calculateBtn').addEventListener('click', async () => {
   preview.classList.remove('hidden');
 
   try {
-    const res = await fetch('/api/admin/results', {
+    const res = await fetch('https://f1-forge.onrender.com/api/admin/results', {
       method:  'POST',
       headers: {
         'Content-Type':  'application/json',

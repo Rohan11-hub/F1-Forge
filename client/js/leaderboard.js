@@ -12,7 +12,7 @@ async function loadLeaderboard() {
   const tableSection  = document.querySelector('.table-section');
 
   try {
-    const res  = await fetch('/api/leaderboard');
+    const res  = await fetch('https://f1-forge.onrender.com/api/leaderboard');
     const data = await res.json();
 
     if (!data || data.length === 0) {
