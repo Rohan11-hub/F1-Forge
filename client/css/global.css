@@ -39,7 +39,9 @@ input, textarea, select { font-family: inherit; font-size: inherit; }
   --bg:        #1A1A1A;
   --card:      #23232B;
   --primary:   #E8002D;
-  --secondary: #4169E1;
+  --secondary: #1B2A4A;
+  --navy:      #1B2A4A;
+  --navy-light:#2A3F6B;
   --text:      #F5F5F5;
   --muted:     #A0A0A0;
   --border:    #2a2a2a;
@@ -163,11 +165,12 @@ nav {
   transition: background 0.3s ease, border-color 0.3s ease;
 }
 
+/* Logo — white in dark, black in light */
 .logo {
   font-family: var(--font-display);
   font-size: 22px;
   letter-spacing: 0.12em;
-  color: var(--primary);
+  color: var(--text);
   flex-shrink: 0;
 }
 
@@ -213,13 +216,14 @@ nav {
 
 .nav-auth:hover { color: var(--text); border-color: var(--text); }
 
+/* Sign Up button — navy */
 .nav-auth.primary {
-  color: var(--primary);
-  border-color: var(--primary);
+  color: #6B8FD4;
+  border-color: var(--navy-light);
 }
 
 .nav-auth.primary:hover {
-  background: var(--primary);
+  background: var(--navy-light);
   color: #fff;
 }
 
@@ -263,7 +267,7 @@ nav {
 .cursor-ring {
   width: 28px;
   height: 28px;
-  border: 1.5px solid var(--secondary);
+  border: 1.5px solid var(--navy-light);
   border-radius: 50%;
   transition: width 0.15s ease, height 0.15s ease, border-radius 0.2s ease, border-color 0.2s ease;
 }
@@ -294,7 +298,7 @@ nav {
    ============================================================ */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
-::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: var(--navy-light); border-radius: 2px; }
 
 /* ============================================================
    FORM ELEMENTS
@@ -311,7 +315,7 @@ nav {
   outline: none;
 }
 
-.input:focus { border-color: var(--primary); }
+.input:focus { border-color: var(--navy-light); }
 .input.error { border-color: var(--error); }
 .input.success { border-color: var(--success); }
 
