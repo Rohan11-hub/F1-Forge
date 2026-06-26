@@ -1,0 +1,364 @@
+/* ============================================================
+   F1 FORGE — paddock.css
+   ============================================================ */
+
+/* --- HEADER --- */
+#paddock-header {
+  padding: 3rem 0 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.paddock-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* --- TABS --- */
+#tab-bar {
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0;
+}
+
+.tab-inner {
+  display: flex;
+  gap: 0;
+}
+
+.tab-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid transparent;
+  transition: color var(--transition), border-color var(--transition);
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.tab-btn:hover { color: var(--text); }
+
+.tab-btn.active {
+  color: var(--text);
+  border-bottom-color: var(--primary);
+}
+
+/* --- TAB CONTENT --- */
+.tab-content {
+  display: none;
+  padding: 3rem 0;
+}
+
+.tab-content.active { display: block; }
+
+/* --- CARD GRID --- */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+/* --- DRIVER CARD --- */
+.paddock-card {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid transparent;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: transform var(--transition), border-color var(--transition);
+  cursor: none;
+}
+
+.paddock-card:hover {
+  transform: translateY(-2px);
+}
+
+.paddock-card.driver { border-left-color: var(--primary); }
+.paddock-card.constructor { border-left-color: var(--secondary); }
+
+.card-pos {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.card-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1.1;
+  margin: 2px 0;
+}
+
+.card-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.card-price {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  margin-top: 6px;
+}
+
+.card-price.driver-price { color: var(--primary); }
+.card-price.constructor-price { color: var(--secondary); }
+
+.card-tap {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-top: 8px;
+  opacity: 0.6;
+}
+
+/* --- RACE LIST --- */
+.race-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.race-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.25rem 0;
+  border-bottom: 0.5px solid var(--border);
+  transition: transform var(--transition);
+  cursor: none;
+}
+
+.race-row:last-child { border-bottom: none; }
+.race-row:hover { transform: translateX(4px); }
+
+.race-row.completed { opacity: 0.5; }
+.race-row.next { opacity: 1; }
+
+.race-num {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+.race-num.next-num { color: var(--primary); }
+
+.race-info { display: flex; flex-direction: column; gap: 3px; }
+
+.race-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.race-circuit {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.race-datetime {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.race-status {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  padding: 3px 8px;
+  border-radius: 3px;
+  margin-top: 4px;
+  align-self: flex-end;
+}
+
+.race-status.done { 
+  color: var(--muted); 
+  border: 0.5px solid var(--border);
+}
+
+.race-status.upcoming { 
+  color: var(--primary); 
+  border: 0.5px solid var(--primary);
+}
+
+.race-status.next-race { 
+  color: #fff;
+  background: var(--primary);
+}
+
+/* --- MODAL --- */
+#modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  backdrop-filter: blur(4px);
+}
+
+#modal-overlay.hidden { display: none; }
+
+#modal {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+  position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+#modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  transition: color var(--transition);
+}
+
+#modal-close:hover { color: var(--text); }
+
+/* --- MODAL CONTENT --- */
+.modal-img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--border);
+  margin-bottom: 1rem;
+}
+
+.modal-pos {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.modal-name {
+  font-family: var(--font-display);
+  font-size: 36px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.modal-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.modal-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.modal-stat {
+  background: var(--bg);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+.stat-value {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.modal-links {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.modal-link {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  padding: 8px 16px;
+  border-radius: var(--radius);
+  transition: all var(--transition);
+}
+
+.modal-link.instagram {
+  color: var(--primary);
+  border: 0.5px solid var(--primary);
+}
+
+.modal-link.instagram:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.modal-link.website {
+  color: var(--secondary);
+  border: 0.5px solid var(--secondary);
+}
+
+.modal-link.website:hover {
+  background: var(--secondary);
+  color: #fff;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+  .card-grid { grid-template-columns: 1fr 1fr; }
+  .race-row { grid-template-columns: 40px 1fr; }
+  .race-datetime { display: none; }
+  .modal-stats { grid-template-columns: 1fr 1fr; }
+}
