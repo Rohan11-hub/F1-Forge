@@ -5,31 +5,51 @@
 
 const BASE_URL = 'https://f1-forge.onrender.com';
 
-// Full 2026 F1 Calendar
+// Full 2026 F1 Calendar (all times in UTC)
 const races = [
-  { round: 1,  name: 'Australian Grand Prix',    circuit: 'Albert Park Circuit, Melbourne',      date: '2026-03-15T05:00:00Z', time: '10:30 AM IST' },
-  { round: 2,  name: 'Chinese Grand Prix',        circuit: 'Shanghai International Circuit',      date: '2026-03-22T07:00:00Z', time: '12:30 PM IST' },
-  { round: 3,  name: 'Japanese Grand Prix',       circuit: 'Suzuka International Racing Course',  date: '2026-04-05T05:00:00Z', time: '10:30 AM IST' },
-  { round: 4,  name: 'Miami Grand Prix',          circuit: 'Miami International Autodrome',       date: '2026-05-03T19:00:00Z', time: '12:30 AM IST' },
-  { round: 5,  name: 'Canadian Grand Prix',       circuit: 'Circuit Gilles Villeneuve, Montreal', date: '2026-06-07T18:00:00Z', time: '11:30 PM IST' },
-  { round: 6,  name: 'Monaco Grand Prix',         circuit: 'Circuit de Monaco',                   date: '2026-05-24T13:00:00Z', time: '6:30 PM IST' },
-  { round: 7,  name: 'Spanish Grand Prix',        circuit: 'Circuit de Barcelona-Catalunya',      date: '2026-06-14T13:00:00Z', time: '6:30 PM IST' },
-  { round: 8,  name: 'Austrian Grand Prix',       circuit: 'Red Bull Ring, Spielberg',            date: '2026-06-28T13:00:00Z', time: '6:30 PM IST' },
-  { round: 9,  name: 'British Grand Prix',        circuit: 'Silverstone Circuit',                 date: '2026-07-05T14:00:00Z', time: '7:30 PM IST' },
-  { round: 10, name: 'Belgian Grand Prix',        circuit: 'Circuit de Spa-Francorchamps',        date: '2026-07-19T13:00:00Z', time: '6:30 PM IST' },
-  { round: 11, name: 'Hungarian Grand Prix',      circuit: 'Hungaroring, Budapest',               date: '2026-07-26T13:00:00Z', time: '6:30 PM IST' },
-  { round: 12, name: 'Dutch Grand Prix',          circuit: 'Circuit Zandvoort',                   date: '2026-08-23T13:00:00Z', time: '6:30 PM IST' },
-  { round: 13, name: 'Italian Grand Prix',        circuit: 'Autodromo Nazionale Monza',           date: '2026-09-06T13:00:00Z', time: '6:30 PM IST' },
-  { round: 14, name: 'Spanish Grand Prix Madrid', circuit: 'Circuit Madrid Motorsport',           date: '2026-09-13T13:00:00Z', time: '6:30 PM IST' },
-  { round: 15, name: 'Azerbaijan Grand Prix',     circuit: 'Baku City Circuit',                   date: '2026-09-26T11:00:00Z', time: '4:30 PM IST' },
-  { round: 16, name: 'Singapore Grand Prix',      circuit: 'Marina Bay Street Circuit',           date: '2026-10-11T12:00:00Z', time: '5:30 PM IST' },
-  { round: 17, name: 'United States Grand Prix',  circuit: 'Circuit of the Americas, Austin',     date: '2026-10-25T19:00:00Z', time: '12:30 AM IST' },
-  { round: 18, name: 'Mexico City Grand Prix',    circuit: 'Autodromo Hermanos Rodriguez',        date: '2026-11-01T19:00:00Z', time: '12:30 AM IST' },
-  { round: 19, name: 'São Paulo Grand Prix',      circuit: 'Autodromo Jose Carlos Pace',          date: '2026-11-08T17:00:00Z', time: '10:30 PM IST' },
-  { round: 20, name: 'Las Vegas Grand Prix',      circuit: 'Las Vegas Strip Circuit',             date: '2026-11-21T06:00:00Z', time: '11:30 AM IST' },
-  { round: 21, name: 'Qatar Grand Prix',          circuit: 'Lusail International Circuit',        date: '2026-11-29T13:00:00Z', time: '6:30 PM IST' },
-  { round: 22, name: 'Abu Dhabi Grand Prix',      circuit: 'Yas Marina Circuit',                  date: '2026-12-06T13:00:00Z', time: '6:30 PM IST' },
+  { round: 1,  name: 'Australian Grand Prix',    circuit: 'Albert Park Circuit, Melbourne',      country: 'Australia', date: '2026-03-15T05:00:00Z' },
+  { round: 2,  name: 'Chinese Grand Prix',        circuit: 'Shanghai International Circuit',      country: 'China',     date: '2026-03-22T07:00:00Z' },
+  { round: 3,  name: 'Japanese Grand Prix',       circuit: 'Suzuka International Racing Course',  country: 'Japan',     date: '2026-04-05T05:00:00Z' },
+  { round: 4,  name: 'Miami Grand Prix',          circuit: 'Miami International Autodrome',       country: 'USA',       date: '2026-05-03T19:00:00Z' },
+  { round: 5,  name: 'Canadian Grand Prix',       circuit: 'Circuit Gilles Villeneuve, Montreal', country: 'Canada',    date: '2026-06-07T18:00:00Z' },
+  { round: 6,  name: 'Monaco Grand Prix',         circuit: 'Circuit de Monaco',                   country: 'Monaco',    date: '2026-05-24T13:00:00Z' },
+  { round: 7,  name: 'Spanish Grand Prix',        circuit: 'Circuit de Barcelona-Catalunya',      country: 'Spain',     date: '2026-06-14T13:00:00Z' },
+  { round: 8,  name: 'Austrian Grand Prix',       circuit: 'Red Bull Ring, Spielberg',            country: 'Austria',   date: '2026-06-28T13:00:00Z' },
+  { round: 9,  name: 'British Grand Prix',        circuit: 'Silverstone Circuit',                 country: 'UK',        date: '2026-07-05T14:00:00Z' },
+  { round: 10, name: 'Belgian Grand Prix',        circuit: 'Circuit de Spa-Francorchamps',        country: 'Belgium',   date: '2026-07-19T13:00:00Z' },
+  { round: 11, name: 'Hungarian Grand Prix',      circuit: 'Hungaroring, Budapest',               country: 'Hungary',   date: '2026-07-26T13:00:00Z' },
+  { round: 12, name: 'Dutch Grand Prix',          circuit: 'Circuit Zandvoort',                   country: 'Netherlands', date: '2026-08-23T13:00:00Z' },
+  { round: 13, name: 'Italian Grand Prix',        circuit: 'Autodromo Nazionale Monza',           country: 'Italy',     date: '2026-09-06T13:00:00Z' },
+  { round: 14, name: 'Spanish Grand Prix Madrid', circuit: 'Circuit Madrid Motorsport',           country: 'Spain',     date: '2026-09-13T13:00:00Z' },
+  { round: 15, name: 'Azerbaijan Grand Prix',     circuit: 'Baku City Circuit',                   country: 'Azerbaijan', date: '2026-09-26T11:00:00Z' },
+  { round: 16, name: 'Singapore Grand Prix',      circuit: 'Marina Bay Street Circuit',           country: 'Singapore', date: '2026-10-11T12:00:00Z' },
+  { round: 17, name: 'United States Grand Prix',  circuit: 'Circuit of the Americas, Austin',     country: 'USA',       date: '2026-10-25T19:00:00Z' },
+  { round: 18, name: 'Mexico City Grand Prix',    circuit: 'Autodromo Hermanos Rodriguez',        country: 'Mexico',    date: '2026-11-01T19:00:00Z' },
+  { round: 19, name: 'São Paulo Grand Prix',      circuit: 'Autodromo Jose Carlos Pace',          country: 'Brazil',    date: '2026-11-08T17:00:00Z' },
+  { round: 20, name: 'Las Vegas Grand Prix',      circuit: 'Las Vegas Strip Circuit',             country: 'USA',       date: '2026-11-21T06:00:00Z' },
+  { round: 21, name: 'Qatar Grand Prix',          circuit: 'Lusail International Circuit',        country: 'Qatar',     date: '2026-11-29T13:00:00Z' },
+  { round: 22, name: 'Abu Dhabi Grand Prix',      circuit: 'Yas Marina Circuit',                  country: 'UAE',       date: '2026-12-06T13:00:00Z' },
 ];
+
+// --- FORMAT LOCAL TIME ---
+function formatLocalTime(utcDateStr) {
+  const date = new Date(utcDateStr);
+  return date.toLocaleTimeString([], {
+    hour:   '2-digit',
+    minute: '2-digit',
+    timeZoneName: 'short'
+  });
+}
+
+function formatLocalDate(utcDateStr) {
+  const date = new Date(utcDateStr);
+  return date.toLocaleDateString([], {
+    weekday: 'short',
+    day:     'numeric',
+    month:   'long',
+    year:    'numeric'
+  });
+}
 
 // --- FIND NEXT RACE ---
 function getNextRace() {
@@ -70,7 +90,7 @@ function loadNextRace() {
   const roundEl = document.querySelector('.race-round');
 
   if (nameEl)  nameEl.textContent  = race.name.toUpperCase();
-  if (metaEl)  metaEl.textContent  = `${race.circuit} · ${new Date(race.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })} · ${race.time}`;
+  if (metaEl)  metaEl.textContent  = `${race.circuit} · ${formatLocalDate(race.date)} · ${formatLocalTime(race.date)}`;
   if (roundEl) roundEl.textContent = `ROUND ${race.round}`;
 
   updateCountdown(race.date);
