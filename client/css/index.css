@@ -3,9 +3,6 @@
    Homepage only
    ============================================================ */
 
-/* ============================================================
-   HERO
-   ============================================================ */
 #hero {
   min-height: calc(100vh - 56px);
   display: flex;
@@ -22,8 +19,8 @@
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(232, 0, 45, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(232, 0, 45, 0.03) 1px, transparent 1px);
+    linear-gradient(rgba(27, 42, 74, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(27, 42, 74, 0.06) 1px, transparent 1px);
   background-size: 60px 60px;
   pointer-events: none;
   z-index: 0;
@@ -33,7 +30,7 @@
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.25em;
-  color: var(--primary);
+  color: #8AAEE0;
   margin-bottom: 1rem;
   position: relative;
   z-index: 1;
@@ -42,7 +39,7 @@
 #hero h1 {
   position: relative;
   z-index: 1;
-  background: linear-gradient(135deg, var(--text) 60%, var(--primary));
+  background: linear-gradient(135deg, var(--text) 60%, var(--navy-light));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -91,9 +88,7 @@
   color: #fff;
 }
 
-/* ============================================================
-   NEXT RACE
-   ============================================================ */
+/* NEXT RACE */
 #next-race {
   padding: 4rem 0;
   border-top: 0.5px solid var(--border);
@@ -108,7 +103,7 @@
   gap: 2rem;
   background: var(--card);
   border: 0.5px solid var(--border);
-  border-left: 3px solid var(--primary);
+  border-left: 3px solid var(--navy-light);
   border-radius: var(--radius);
   padding: 2rem;
 }
@@ -117,7 +112,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.2em;
-  color: var(--primary);
+  color: #8AAEE0;
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -202,9 +197,7 @@
   .countdown-block { border-left: none; padding-left: 0; border-top: 0.5px solid var(--border); padding-top: 1.5rem; }
 }
 
-/* ============================================================
-   LAST RACE
-   ============================================================ */
+/* LAST RACE */
 #last-race {
   padding: 4rem 0;
   border-top: 0.5px solid var(--border);
@@ -221,7 +214,7 @@
 .result-card {
   background: var(--card);
   border: 0.5px solid var(--border);
-  border-left: 3px solid var(--secondary);
+  border-left: 3px solid var(--navy-light);
   border-radius: var(--radius);
   padding: 1.25rem;
   transition: transform var(--transition);
@@ -229,16 +222,13 @@
 
 .result-card:hover { transform: translateY(-2px); }
 .result-card.wide { grid-column: 1 / -1; }
-
 .card-value.completed { color: var(--success); }
 
 @media (max-width: 560px) {
   .result-grid { grid-template-columns: 1fr; }
 }
 
-/* ============================================================
-   SCORING
-   ============================================================ */
+/* SCORING */
 #scoring {
   padding: 4rem 0;
   border-top: 0.5px solid var(--border);
@@ -261,10 +251,7 @@
   margin-bottom: 1rem;
 }
 
-.score-rows {
-  display: flex;
-  flex-direction: column;
-}
+.score-rows { display: flex; flex-direction: column; }
 
 .score-row {
   display: flex;
@@ -280,15 +267,10 @@
 
 .score-row:last-child { border-bottom: none; }
 
-.pts {
-  font-weight: 500;
-  color: var(--text);
-}
-
+.pts { font-weight: 500; color: var(--text); }
 .pts.bonus { color: var(--success); }
 .pts.neg { color: var(--error); }
 .pts.muted { color: var(--muted); }
-
 .score-row.negative { color: var(--error); }
 
 .turbo-card {
@@ -329,9 +311,7 @@
   .scoring-grid { grid-template-columns: 1fr; gap: 2rem; }
 }
 
-/* ============================================================
-   HOW IT WORKS
-   ============================================================ */
+/* HOW IT WORKS */
 #how-it-works {
   padding: 4rem 0;
   border-top: 0.5px solid var(--border);
@@ -339,10 +319,7 @@
 
 #how-it-works h2 { margin-bottom: 2rem; }
 
-.steps {
-  display: flex;
-  flex-direction: column;
-}
+.steps { display: flex; flex-direction: column; }
 
 .step {
   display: flex;
@@ -360,7 +337,7 @@
   font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
-  color: var(--primary);
+  color: #8AAEE0;
   flex-shrink: 0;
   padding-top: 2px;
   min-width: 28px;
@@ -382,9 +359,7 @@
   color: var(--muted);
 }
 
-/* ============================================================
-   ABOUT
-   ============================================================ */
+/* ABOUT */
 #about {
   padding: 4rem 0;
   border-top: 0.5px solid var(--border);
@@ -403,7 +378,7 @@
 .maker-card {
   background: var(--card);
   border: 0.5px solid var(--border);
-  border-left: 3px solid var(--primary);
+  border-left: 3px solid var(--navy-light);
   border-radius: var(--radius);
   padding: 1.5rem;
   display: inline-flex;
@@ -415,7 +390,7 @@
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.15em;
-  color: var(--primary);
+  color: #8AAEE0;
   margin-top: 0.5rem;
   transition: letter-spacing var(--transition);
 }
