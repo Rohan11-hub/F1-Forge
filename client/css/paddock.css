@@ -122,6 +122,24 @@
 .card-price.driver-price { color: var(--primary); }
 .card-price.constructor-price { color: var(--secondary); }
 
+.card-img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  object-position: top;
+  border-radius: var(--radius);
+  margin: 6px 0;
+  border: 0.5px solid var(--border);
+}
+
+.race-winner {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--primary);
+  margin-top: 2px;
+}
+
 .card-tap {
   font-family: var(--font-mono);
   font-size: 9px;
@@ -151,8 +169,13 @@
 .race-row:last-child { border-bottom: none; }
 .race-row:hover { transform: translateX(4px); }
 
-.race-row.completed { opacity: 0.5; }
-.race-row.next { opacity: 1; }
+.race-row.completed { opacity: 0.6; }
+.race-row.completed .race-name { color: var(--secondary); }
+.race-row.completed .race-num { color: var(--secondary); }
+.race-row.next .race-name { color: var(--text); }
+.race-row.next .race-num { color: var(--text); }
+.race-row:not(.completed):not(.next) .race-name { color: var(--primary); }
+.race-row:not(.completed):not(.next) .race-num { color: var(--primary); }
 
 .race-num {
   font-family: var(--font-display);
@@ -199,18 +222,18 @@
 }
 
 .race-status.done { 
-  color: var(--muted); 
-  border: 0.5px solid var(--border);
+  color: var(--secondary); 
+  border: 0.5px solid var(--secondary);
 }
 
 .race-status.upcoming { 
-  color: var(--primary); 
-  border: 0.5px solid var(--primary);
+  color: var(--text); 
+  border: 0.5px solid var(--border);
 }
 
 .race-status.next-race { 
-  color: #fff;
-  background: var(--primary);
+  color: var(--text);
+  border: 0.5px solid var(--text);
 }
 
 /* --- MODAL --- */
