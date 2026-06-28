@@ -24,6 +24,7 @@ app.use('/api/team',        require('./routes/team'));
 app.use('/api/leaderboard', require('./routes/leaderboard'));
 app.use('/api/admin',       require('./routes/admin'));
 app.use('/api/races',       require('./routes/races'));
+app.use('/api/predictions', require('./routes/predictions'));
 
 // --- CATCH ALL — serve index.html ---
 app.get('/{*path}', (req, res) => {
