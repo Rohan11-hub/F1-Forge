@@ -1,0 +1,281 @@
+/* ============================================================
+   F1 FORGE — predictions.css
+   ============================================================ */
+
+#pred-header {
+  padding: 3rem 0 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.pred-sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* --- LOCK BAR --- */
+#lock-bar {
+  position: sticky;
+  top: 56px;
+  z-index: 90;
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  border-bottom: 0.5px solid var(--border);
+  padding: 0.75rem 0;
+}
+
+.lock-inner {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.lock-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+  display: block;
+}
+
+.lock-value {
+  font-family: var(--font-display);
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  display: block;
+}
+
+.lock-value.open   { color: var(--success); }
+.lock-value.locked { color: var(--error); }
+
+/* --- SECTIONS --- */
+.pred-section {
+  padding: 3rem 0;
+  border-bottom: 0.5px solid var(--border);
+  max-width: 600px;
+}
+
+.pred-section:last-child { border-bottom: none; }
+.pred-section h2 { margin-bottom: 0.5rem; }
+
+.pred-desc {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+  line-height: 1.7;
+}
+
+/* --- SELECTS --- */
+.pred-select {
+  max-width: 400px;
+  appearance: none;
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition: border-color var(--transition);
+  width: 100%;
+}
+
+.pred-select:focus { border-color: var(--primary); }
+
+.pred-number {
+  max-width: 160px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 32px;
+  letter-spacing: 0.06em;
+}
+
+/* --- PODIUM PICKS --- */
+.podium-picks {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.podium-pick {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.podium-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--primary);
+}
+
+/* --- TOGGLE BUTTONS --- */
+.toggle-picks {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.toggle-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  padding: 10px 28px;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border);
+  color: var(--muted);
+  transition: all var(--transition);
+}
+
+.toggle-btn.active {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(232, 0, 45, 0.06);
+}
+
+.toggle-btn:hover:not(.active) {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+/* --- SUBMIT --- */
+.pred-submit { border-bottom: none; }
+
+.submit-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--primary);
+  border: 0.5px solid var(--primary);
+  padding: 14px 32px;
+  border-radius: var(--radius);
+  transition: background var(--transition), color var(--transition);
+}
+
+.submit-btn:hover {
+  background: var(--primary);
+  color: #fff;
+}
+
+.submit-btn:disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.submit-note {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  margin-top: 0.75rem;
+}
+
+.submit-note.success { color: var(--success); }
+.submit-note.error   { color: var(--error); }
+
+/* --- LOCKED STATE --- */
+.locked-msg {
+  padding: 3rem 0 1.5rem;
+  border-bottom: 0.5px solid var(--border);
+}
+
+.locked-msg h2 { color: var(--error); margin-bottom: 0.5rem; }
+.locked-msg p  { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+/* --- MY PREDICTIONS DISPLAY --- */
+.my-pred-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  padding: 2rem 0;
+}
+
+.my-pred-card {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--secondary);
+  border-radius: var(--radius);
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.my-pred-card.correct   { border-left-color: var(--success); }
+.my-pred-card.incorrect { border-left-color: var(--error); }
+.my-pred-card.pending   { border-left-color: var(--muted); }
+
+.pred-card-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+
+.pred-card-value {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.pred-card-pts {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--success);
+  margin-top: 4px;
+}
+
+/* --- PAST PREDICTIONS --- */
+#pastSection { padding-top: 4rem; }
+
+.past-race {
+  background: var(--card);
+  border: 0.5px solid var(--border);
+  border-left: 3px solid var(--secondary);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.past-race-name {
+  font-family: var(--font-display);
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+}
+
+.past-race-pts {
+  font-family: var(--font-display);
+  font-size: 24px;
+  letter-spacing: 0.04em;
+  color: var(--primary);
+}
+
+.past-race-pts.pending { color: var(--muted); font-size: 14px; }
+
+.no-predictions {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  padding: 2rem 0;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 600px) {
+  .podium-picks { grid-template-columns: 1fr; }
+  .my-pred-grid { grid-template-columns: 1fr; }
+  .lock-inner   { gap: 1.5rem; }
+}

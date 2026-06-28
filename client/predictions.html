@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Predictions — F1 Forge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/predictions.css">
+</head>
+
+<body>
+
+  <!-- CURSOR -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-ring"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">F1 FORGE</a>
+    <div class="nav-links">
+      <a href="teambuilder.html">Team Builder</a>
+      <a href="leaderboard.html">Leaderboard</a>
+      <a href="predictions.html" class="active">Predictions</a>
+      <a href="settings.html">Settings</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle">DARK</button>
+    </div>
+  </nav>
+
+  <!-- HEADER -->
+  <div id="pred-header">
+    <div class="centered">
+      <span class="sec-num">RACE PREDICTIONS</span>
+      <h2>PREDICTIONS</h2>
+      <p class="pred-sub">Predict race outcomes before qualifying starts. Max 100 pts per race.</p>
+    </div>
+  </div>
+
+  <!-- LOCK STATUS BAR -->
+  <div id="lock-bar">
+    <div class="centered lock-inner">
+      <div id="lock-status">
+        <span class="lock-label">STATUS</span>
+        <span class="lock-value" id="lockValue">LOADING...</span>
+      </div>
+      <div id="lock-timer">
+        <span class="lock-label">LOCKS IN</span>
+        <span class="lock-value" id="lockTimer">—</span>
+      </div>
+      <div id="lock-race">
+        <span class="lock-label">RACE</span>
+        <span class="lock-value" id="lockRace">—</span>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="centered">
+
+      <!-- LOCKED STATE -->
+      <div id="locked-state" class="hidden">
+        <div class="locked-msg">
+          <span class="sec-num">PREDICTIONS LOCKED</span>
+          <h2>QUALIFYING HAS STARTED</h2>
+          <p>Predictions are locked. Results will be calculated after the race.</p>
+        </div>
+        <div id="my-predictions-display"></div>
+      </div>
+
+      <!-- PREDICTION FORM -->
+      <div id="prediction-form">
+
+        <!-- 1. PODIUM -->
+        <section class="pred-section">
+          <span class="sec-num">01 — PODIUM</span>
+          <h2>PREDICT THE PODIUM</h2>
+          <p class="pred-desc">Pick P1, P2 and P3 in order. All correct = 15pts · All in wrong order = 10pts · 2 correct = 10pts · 1 correct = 5pts</p>
+          <div class="podium-picks">
+            <div class="podium-pick">
+              <span class="podium-label">P1 — WINNER</span>
+              <select class="input pred-select" id="podium1"></select>
+            </div>
+            <div class="podium-pick">
+              <span class="podium-label">P2 — SECOND</span>
+              <select class="input pred-select" id="podium2"></select>
+            </div>
+            <div class="podium-pick">
+              <span class="podium-label">P3 — THIRD</span>
+              <select class="input pred-select" id="podium3"></select>
+            </div>
+          </div>
+        </section>
+
+        <!-- 2. POLE POSITION -->
+        <section class="pred-section">
+          <span class="sec-num">02 — POLE POSITION</span>
+          <h2>PREDICT POLE</h2>
+          <p class="pred-desc">Correct = 10 pts</p>
+          <select class="input pred-select" id="pole"></select>
+        </section>
+
+        <!-- 3. FASTEST LAP -->
+        <section class="pred-section">
+          <span class="sec-num">03 — FASTEST LAP</span>
+          <h2>PREDICT FASTEST LAP</h2>
+          <p class="pred-desc">Correct = 10 pts</p>
+          <select class="input pred-select" id="fastestLap"></select>
+        </section>
+
+        <!-- 4. SAFETY CAR -->
+        <section class="pred-section">
+          <span class="sec-num">04 — SAFETY CAR</span>
+          <h2>WILL THERE BE A SAFETY CAR?</h2>
+          <p class="pred-desc">Correct = 5 pts</p>
+          <div class="toggle-picks">
+            <button class="toggle-btn active" id="scYes" data-val="true">YES</button>
+            <button class="toggle-btn" id="scNo" data-val="false">NO</button>
+          </div>
+          <input type="hidden" id="safetyCar" value="true">
+        </section>
+
+        <!-- 5. DNF DRIVER -->
+        <section class="pred-section">
+          <span class="sec-num">05 — DNF</span>
+          <h2>PREDICT A DNF DRIVER</h2>
+          <p class="pred-desc">Pick a driver who won't finish the race. Correct = 10 pts</p>
+          <select class="input pred-select" id="dnfDriver"></select>
+        </section>
+
+        <!-- 6. FASTEST PIT STOP -->
+        <section class="pred-section">
+          <span class="sec-num">06 — FASTEST PIT STOP</span>
+          <h2>PREDICT FASTEST PIT STOP TEAM</h2>
+          <p class="pred-desc">Correct = 10 pts</p>
+          <select class="input pred-select" id="fastestPit"></select>
+        </section>
+
+        <!-- 7. RETIREMENTS -->
+        <section class="pred-section">
+          <span class="sec-num">07 — RETIREMENTS</span>
+          <h2>HOW MANY RETIREMENTS?</h2>
+          <p class="pred-desc">Exact = 10 pts · ±1 = 5 pts</p>
+          <input type="number" class="input pred-number" id="retirements" min="0" max="22" placeholder="0">
+        </section>
+
+        <!-- 8. TOP TEAM -->
+        <section class="pred-section">
+          <span class="sec-num">08 — TOP TEAM</span>
+          <h2>WHICH TEAM SCORES MOST POINTS?</h2>
+          <p class="pred-desc">Correct = 10 pts</p>
+          <select class="input pred-select" id="topTeam"></select>
+        </section>
+
+        <!-- 9. MOST POSITIONS GAINED -->
+        <section class="pred-section">
+          <span class="sec-num">09 — POSITIONS GAINED</span>
+          <h2>WHICH DRIVER GAINS MOST POSITIONS?</h2>
+          <p class="pred-desc">Correct = 10 pts</p>
+          <select class="input pred-select" id="mostPositions"></select>
+        </section>
+
+        <!-- 10. DRIVER OF THE DAY -->
+        <section class="pred-section">
+          <span class="sec-num">10 — DRIVER OF THE DAY</span>
+          <h2>PREDICT DRIVER OF THE DAY</h2>
+          <p class="pred-desc">Correct = 10 pts</p>
+          <select class="input pred-select" id="driverOfTheDay"></select>
+        </section>
+
+        <!-- SUBMIT -->
+        <section class="pred-section pred-submit">
+          <button class="submit-btn" id="submitBtn">SUBMIT PREDICTIONS →</button>
+          <p class="submit-note" id="submitNote"></p>
+        </section>
+
+      </div>
+
+      <!-- PAST PREDICTIONS -->
+      <section class="pred-section" id="pastSection">
+        <span class="sec-num">PAST PREDICTIONS</span>
+        <h2>YOUR HISTORY</h2>
+        <div id="pastPredictions"></div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="js/navigation.js"></script>
+  <script src="js/predictions.js"></script>
+
+</body>
+</html>

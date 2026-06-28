@@ -20,9 +20,8 @@
 
   <!-- NAV -->
   <nav>
-   
+    <a href="index.html" class="logo">F1 FORGE</a>
     <div class="nav-links">
-      <a href="index.html" class="logo">Home</a>
       <a href="teambuilder.html">Team Builder</a>
       <a href="leaderboard.html">Leaderboard</a>
       <a href="settings.html">Settings</a>
@@ -44,7 +43,7 @@
   <main>
     <div class="centered">
 
-      <!-- RACE SELECTOR -->
+      <!-- RACE INFO -->
       <section class="admin-section">
         <span class="sec-num">01 — RACE</span>
         <h2>SELECT RACE</h2>
@@ -55,7 +54,7 @@
           </div>
           <div class="form-group">
             <label class="form-label">ROUND NUMBER</label>
-            <input type="number" id="raceRound" class="input" placeholder="12" min="1" max="24">
+            <input type="number" id="raceRound" class="input" placeholder="8" min="1" max="22">
           </div>
           <div class="form-group">
             <label class="form-label">RACE DATE</label>
@@ -96,9 +95,52 @@
         </div>
       </section>
 
+      <!-- PREDICTION RESULTS -->
+      <section class="admin-section">
+        <span class="sec-num">05 — PREDICTION DATA</span>
+        <h2>PREDICTION OUTCOMES</h2>
+        <p class="admin-sub">Used to calculate prediction scores.</p>
+        <div class="admin-card">
+
+          <div class="form-group">
+            <label class="form-label">SAFETY CAR?</label>
+            <select id="safetyCar" class="input">
+              <option value="true">YES</option>
+              <option value="false">NO</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">FASTEST PIT STOP TEAM</label>
+            <select id="fastestPitTeam" class="input"></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">NUMBER OF RETIREMENTS</label>
+            <input type="number" id="retirements" class="input" placeholder="0" min="0" max="22">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">TEAM THAT SCORED MOST POINTS</label>
+            <select id="topTeam" class="input"></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">DRIVER WHO GAINED MOST POSITIONS</label>
+            <select id="mostPositions" class="input"></select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">DRIVER OF THE DAY</label>
+            <select id="driverOfTheDay" class="input"></select>
+          </div>
+
+        </div>
+      </section>
+
       <!-- CALCULATE -->
       <section class="admin-section">
-        <span class="sec-num">05 — CALCULATE</span>
+        <span class="sec-num">06 — CALCULATE</span>
         <h2>RUN SCORING ENGINE</h2>
         <div class="admin-actions">
           <button class="admin-btn primary" id="calculateBtn">CALCULATE SCORES →</button>

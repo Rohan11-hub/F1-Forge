@@ -1,11 +1,11 @@
 /* ============================================================
    F1 FORGE — admin.js
-   API version
+   API version with prediction support
    ============================================================ */
 
-const TOKEN = () => localStorage.getItem('f1forge_token');
+const BASE_URL = 'https://f1-forge.onrender.com';
+const TOKEN    = () => localStorage.getItem('f1forge_token');
 
-// Redirect if not logged in or not admin
 const user = JSON.parse(localStorage.getItem('f1forge_user') || 'null');
 if (!user || !user.isAdmin) {
   alert('Admin access only.');
@@ -15,14 +15,11 @@ if (!user || !user.isAdmin) {
 let drivers      = [];
 let constructors = [];
 let raceResults  = {
-  grid:       {},
-  finish:     {},
-  status:     {},
-  pole:       null,
-  fastestLap: null
+  grid: {}, finish: {}, status: {},
+  pole: null, fastestLap: null
 };
 
-// --- LOAD DRIVERS ---
+// --- LOAD DATA ---
 async function loadDrivers() {
   const [dRes, cRes] = await Promise.all([
     fetch('data/drivers.json'),
@@ -40,7 +37,6 @@ async function loadDrivers() {
 function renderGridTable() {
   const table = document.getElementById('gridTable');
   table.innerHTML = '';
-
   drivers.forEach(driver => {
     const row = document.createElement('div');
     row.className = 'driver-row';
@@ -49,15 +45,8 @@ function renderGridTable() {
         <div class="driver-row-name">${driver.name.toUpperCase()}</div>
         <div class="driver-row-team">${driver.team}</div>
       </div>
-      <input
-        type="number"
-        class="input"
-        placeholder="Grid P"
-        min="1"
-        max="22"
-        id="grid_${driver.id}"
-        onchange="raceResults.grid[${driver.id}] = parseInt(this.value)"
-      >
+      <input type="number" class="input" placeholder="Grid P" min="1" max="22"
+        id="grid_${driver.id}" onchange="raceResults.grid[${driver.id}] = parseInt(this.value)">
     `;
     table.appendChild(row);
   });
@@ -67,7 +56,6 @@ function renderGridTable() {
 function renderResultsTable() {
   const table = document.getElementById('resultsTable');
   table.innerHTML = '';
-
   drivers.forEach(driver => {
     const row = document.createElement('div');
     row.className = 'driver-row';
@@ -76,15 +64,8 @@ function renderResultsTable() {
         <div class="driver-row-name">${driver.name.toUpperCase()}</div>
         <div class="driver-row-team">${driver.team}</div>
       </div>
-      <input
-        type="number"
-        class="input"
-        placeholder="Finish P"
-        min="1"
-        max="22"
-        id="finish_${driver.id}"
-        onchange="setFinish(${driver.id}, this.value)"
-      >
+      <input type="number" class="input" placeholder="Finish P" min="1" max="22"
+        id="finish_${driver.id}" onchange="setFinish(${driver.id}, this.value)">
       <select class="input status-select" id="status_${driver.id}" onchange="setStatus(${driver.id}, this.value)">
         <option value="">— Normal —</option>
         <option value="DNF">DNF</option>
@@ -110,27 +91,26 @@ function setStatus(id, value) {
   }
 }
 
-// --- POLE + FASTEST LAP ---
+// --- POPULATE SELECTS ---
 function populateSelects() {
-  const poleSelect    = document.getElementById('poleDriver');
-  const fastestSelect = document.getElementById('fastestLapDriver');
+  const driverOpts      = '<option value="">— Select Driver —</option>' +
+    drivers.map(d => `<option value="${d.id}">${d.name}</option>`).join('');
+  const constructorOpts = '<option value="">— Select Team —</option>' +
+    constructors.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 
-  const defaultOpt = '<option value="">— Select Driver —</option>';
-  poleSelect.innerHTML    = defaultOpt;
-  fastestSelect.innerHTML = defaultOpt;
-
-  drivers.forEach(driver => {
-    const opt = `<option value="${driver.id}">${driver.name}</option>`;
-    poleSelect.innerHTML    += opt;
-    fastestSelect.innerHTML += opt;
+  ['poleDriver', 'fastestLapDriver', 'mostPositions', 'driverOfTheDay'].forEach(id => {
+    document.getElementById(id).innerHTML = driverOpts;
   });
 
-  poleSelect.addEventListener('change', () => {
-    raceResults.pole = parseInt(poleSelect.value);
+  ['fastestPitTeam', 'topTeam'].forEach(id => {
+    document.getElementById(id).innerHTML = constructorOpts;
   });
 
-  fastestSelect.addEventListener('change', () => {
-    raceResults.fastestLap = parseInt(fastestSelect.value);
+  document.getElementById('poleDriver').addEventListener('change', e => {
+    raceResults.pole = parseInt(e.target.value);
+  });
+  document.getElementById('fastestLapDriver').addEventListener('change', e => {
+    raceResults.fastestLap = parseInt(e.target.value);
   });
 }
 
@@ -150,8 +130,34 @@ document.getElementById('calculateBtn').addEventListener('click', async () => {
   previewContent.innerHTML = '<p class="turbo-placeholder">Calculating...</p>';
   preview.classList.remove('hidden');
 
+  // Build podium from results
+  const podium = [];
+  Object.entries(raceResults.finish).forEach(([id, pos]) => {
+    if ([1, 2, 3].includes(parseInt(pos)) && !raceResults.status[id]) {
+      podium[parseInt(pos) - 1] = parseInt(id);
+    }
+  });
+
+  // Build DNF list
+  const dnfDrivers = Object.entries(raceResults.status)
+    .filter(([, s]) => ['DNF', 'DNS', 'DSQ'].includes(s))
+    .map(([id]) => parseInt(id));
+
+  const predictionResults = {
+    podium,
+    pole:           raceResults.pole,
+    fastestLap:     raceResults.fastestLap,
+    safetyCar:      document.getElementById('safetyCar').value === 'true',
+    dnfDrivers,
+    fastestPit:     parseInt(document.getElementById('fastestPitTeam').value) || null,
+    retirements:    parseInt(document.getElementById('retirements').value)    ?? null,
+    topTeam:        parseInt(document.getElementById('topTeam').value)        || null,
+    mostPositions:  parseInt(document.getElementById('mostPositions').value)  || null,
+    driverOfTheDay: parseInt(document.getElementById('driverOfTheDay').value) || null,
+  };
+
   try {
-    const res = await fetch('https://f1-forge.onrender.com/api/admin/results', {
+    const res = await fetch(`${BASE_URL}/api/admin/results`, {
       method:  'POST',
       headers: {
         'Content-Type':  'application/json',
@@ -166,6 +172,7 @@ document.getElementById('calculateBtn').addEventListener('click', async () => {
         status:       raceResults.status,
         pole:         raceResults.pole,
         fastestLap:   raceResults.fastestLap,
+        predictionResults,
         drivers,
         constructors
       })
@@ -174,23 +181,21 @@ document.getElementById('calculateBtn').addEventListener('click', async () => {
     const data = await res.json();
 
     if (!res.ok) {
-      previewContent.innerHTML = `<p class="turbo-placeholder" style="color:var(--error)">${data.message}</p>`;
+      previewContent.innerHTML = `<p style="color:var(--error)">${data.message}</p>`;
       return;
     }
 
-    previewContent.innerHTML = `<p class="turbo-placeholder" style="color:var(--success)">✓ ${data.message}</p>`;
+    previewContent.innerHTML = `<p style="color:var(--success)">✓ ${data.message}</p>`;
     document.getElementById('saveResultsBtn').disabled = false;
 
   } catch (err) {
-    previewContent.innerHTML = '<p class="turbo-placeholder" style="color:var(--error)">Server error. Try again.</p>';
+    previewContent.innerHTML = '<p style="color:var(--error)">Server error. Try again.</p>';
   }
 });
 
-// --- SAVE RESULTS ---
 document.getElementById('saveResultsBtn').addEventListener('click', () => {
   alert('Results saved and leaderboard updated!');
   document.getElementById('saveResultsBtn').disabled = true;
 });
 
-// --- INIT ---
 loadDrivers();
