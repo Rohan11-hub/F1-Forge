@@ -58,18 +58,16 @@ function determineStatus() {
   const qualiStart = new Date(nextRace.qualiDate);
   const prevRaceEnd = prevRace ? new Date(prevRace.raceDate) : null;
 
-  if (now >= qualiStart) {
-    // Qualifying started — locked
-    status = 'locked';
-  } else if (prevRaceEnd && now >= prevRaceEnd) {
-    // Previous race finished, quali not started yet — OPEN
-    status = 'open';
-  } else {
-    // Before previous race has even finished (shouldn't happen normally)
-    status = 'closed';
-  }
+ if (now >= qualiStart) {
+  status = 'locked';
+} else if (prevRaceEnd && now >= prevRaceEnd) {
+  status = 'open';
+} else if (!prevRace) {
+  status = 'closed';
+} else {
+  status = 'closed';
 }
-
+}
 // --- FORMAT TIME LEFT ---
 function formatTimeLeft(ms) {
   if (ms <= 0) return 'NOW';
